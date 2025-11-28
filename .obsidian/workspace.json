@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Projects/tomoni-frontend-migration.md",
-                "mode": "preview",
+                "file": "2025-11-28.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "tomoni-frontend-migration"
+              "title": "2025-11-28"
             }
           }
         ]
@@ -74,7 +74,8 @@
               "title": "ブックマーク"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -94,7 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Welcome.md",
+                "file": "2025-11-28.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +105,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Welcomeへのバックリンク"
+              "title": "Backlinks for 2025-11-28"
             }
           },
           {
@@ -164,13 +165,25 @@
               "icon": "lucide-list",
               "title": "Welcomeのアウトライン"
             }
+          },
+          {
+            "id": "682bafe7e41a56f2",
+            "type": "leaf",
+            "state": {
+              "type": "file-properties",
+              "state": {
+                "file": "2025-11-28.md"
+              },
+              "icon": "lucide-info",
+              "title": "File properties for 2025-11-28"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -185,14 +198,20 @@
   },
   "active": "73487ba899618aa5",
   "lastOpenFiles": [
+    "Untitled.canvas",
+    "2025-11-28.md",
+    "Index.md",
+    "Windows/hyper-v-nat-setup.md",
+    "Projects/tomoni-frontend-migration.md",
+    "Linux/setuid.md",
+    "Linux/server-settings.md",
+    "Linux/rc-local.md",
+    "Linux/postfix.md",
+    "Readme.md",
+    "Frontend/sveltekit-notes.md",
     "Database/sql-cheatsheet.md",
     "Linux/commands-cheatsheet.md",
-    "Projects/tomoni-frontend-migration.md",
     "Docker/fluent-bit-implementation.md",
-    "Linux/setuid.md",
-    "Linux/rc-local.md",
-    "Linux/server-settings.md",
-    "Linux/postfix.md",
     "logging-container-faq.md",
     "Docker/fluent-bit-faq.md",
     "Docker/fluent-bit-introduction.md",
@@ -208,8 +227,6 @@
     "sveltekit&ts_移行計画.md",
     "setuid.md",
     "logging-container-comparison.md",
-    "Readme.md",
-    "Index.md",
     "Welcome.md"
   ]
 }

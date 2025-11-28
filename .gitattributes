@@ -1,0 +1,34 @@
+# 改行コードの自動変換を無効化
+* text=auto eol=lf
+
+# バイナリファイルとして扱うファイル
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# テキストファイルとして扱うファイル（LFで統一）
+*.md text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+

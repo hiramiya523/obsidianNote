@@ -1,5 +1,5 @@
 ---
-title: TOMONIシステム フロントエンド移行計画
+title: フロントエンド移行計画
 created: 2025-11-28
 tags:
   - project

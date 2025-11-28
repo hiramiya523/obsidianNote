@@ -35,11 +35,23 @@ aliases:
 | [[Linux/rc-local\|rc.local]] | 起動スクリプト設定 |
 | [[Linux/setuid\|SetUID]] | 特殊権限について |
 
+### 🪟 Windows
+
+| ドキュメント | 概要 |
+|-------------|------|
+| [[Windows/hyper-v-nat-setup\|Hyper-V NAT構築]] | VM用の内部NATネットワーク設定 |
+
 ### 🗄️ Database
 
 | ドキュメント | 概要 |
 |-------------|------|
 | [[Database/sql-cheatsheet\|SQLチートシート]] | SQL構文・パフォーマンス最適化 |
+
+### 🎨 Frontend
+
+| ドキュメント | 概要 |
+|-------------|------|
+| [[Frontend/sveltekit-notes\|SvelteKitメモ]] | SSR、$state、$derived、$bindable等 |
 
 ### 📋 Projects
 
@@ -61,6 +73,13 @@ aliases:
 - [[Linux/server-settings#ssh設定|SSH設定]]
 - [[Linux/commands-cheatsheet#ファイアウォール|Firewall設定]]
 
+### 仮想化
+- [[Windows/hyper-v-nat-setup|Hyper-V NAT構築]]
+
+### フロントエンド
+- [[Frontend/sveltekit-notes#svelte-5-リアクティビティ|Svelte 5 リアクティビティ]]
+- [[Frontend/sveltekit-notes#bindable---親子間のバインド|$bindable の使い方]]
+
 ### パフォーマンス
 - [[Database/sql-cheatsheet#パフォーマンス最適化|SQLパフォーマンス]]
 - [[Database/sql-cheatsheet#サブクエリの利用局面|サブクエリの注意点]]
@@ -70,10 +89,10 @@ aliases:
 ## 🏷️ タグ一覧
 
 ### インフラ
-#docker #linux #server #logging #monitoring
+#docker #linux #windows #hyper-v #server #logging #monitoring
 
 ### 開発
-#sql #database #mysql #typescript #sveltekit
+#sql #database #mysql #typescript #sveltekit #svelte #frontend
 
 ### セキュリティ
 #security #ssh #permissions
@@ -96,8 +115,12 @@ aliases:
 │   ├── server-settings.md
 │   ├── rc-local.md
 │   └── setuid.md
+├── 📁 Windows/              # Windows関連
+│   └── hyper-v-nat-setup.md
 ├── 📁 Database/             # データベース関連
 │   └── sql-cheatsheet.md
+├── 📁 Frontend/             # フロントエンド関連
+│   └── sveltekit-notes.md
 └── 📁 Projects/             # プロジェクト関連
     └── tomoni-frontend-migration.md
 ```
