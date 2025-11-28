@@ -1,0 +1,342 @@
+---
+title: Linuxコマンド チートシート
+created: 2025-11-28
+tags:
+  - linux
+  - commands
+  - cheatsheet
+aliases:
+  - コマンド
+  - シェル
+---
+
+# Linuxコマンド チートシート
+
+> [!abstract] 概要
+> よく使うLinuxコマンドのリファレンス集です。
+
+---
+
+## ネットワーク
+
+### ss - ソケット情報の確認
+
+```bash
+ss -lnpt
+```
+
+| オプション | 説明 |
+|-----------|------|
+| `-t` | TCPソケット状態表示 |
+| `-u` | UDPソケット状態表示 |
+| `-l` | 接続待ちのみ |
+| `-p` | ソケットと結びつくプロセスを表示 |
+| `-n` | サービス名の名前解決を行わない（ポート番号を表示） |
+
+---
+
+## ファイル操作
+
+### rsync
+
+> [!warning] 注意
+> `exclude`のパス指定は、**コピー元の指定からの相対パス**となることに注意。
+> 絶対パス指定だからと安心しているとエラーになる。
+
+### find - ファイル検索
+
+```bash
+# シンボリックリンクの検索
+find /usr/share/nginx/www/ -type l
+
+# 名前で検索
+find / -name 'pattern'
+
+# ファイル内検索（xargsと組み合わせ）
+find . -name '*log' -type f -print0 | xargs -0 grep ERROR
+
+# .txtファイル内を検索
+find . -name '*.txt' -print0 | xargs -0 grep hoge
+
+# /var/log配下のファイル内を検索
+find /var/log -type f -print0 | xargs -0 grep hoge
+```
+
+> [!warning] パフォーマンス注意
+> `find`コマンドはI/O負荷が高め。高負荷環境では注意が必要。
+
+### grep - テキスト検索
+
+```bash
+# ファイル内検索（findよりシンプル）
+# -i: 大文字小文字区別なし
+grep -i "ERROR" 2023*.log
+
+# 検索結果をlessで表示
+grep 'わーど' {file} | less
+```
+
+### wc - 行数・文字数・容量
+
+```bash
+wc log_search-20220915130605.txt
+```
+
+### tail - ファイル末尾表示
+
+```bash
+# リアルタイム監視 + フィルタ
+tail -f application.log | grep "ERROR"
+```
+
+---
+
+## アーカイブ・圧縮
+
+### tar - アーカイブ作成
+
+```bash
+# 圧縮
+tar czf file_name.tar.gz directory_name
+tar czvf file_name.tar.gz directory_name  # v: 処理内容を表示
+tar czvf file_name.tgz directory_name
+
+# 例
+tar czvf /root/backup/file_server.tar.gz /file_server
+```
+
+### zip - ZIP圧縮
+
+```bash
+# ディレクトリをzip化
+zip -r {zip_name} {zip_from}
+```
+
+---
+
+## ユーザー・グループ管理
+
+### グループ確認
+
+```bash
+# グループ一覧
+getent group
+getent group mysql  # 特定グループ
+
+# または
+cat /etc/group
+```
+
+### グループ追加
+
+```bash
+# userグループを番号501で追加
+groupadd -g 501 user
+```
+
+### ユーザー確認
+
+```bash
+cat /etc/passwd
+```
+
+---
+
+## シェル
+
+### hash - コマンドパス情報
+
+```bash
+# ハッシュテーブルをクリア（nodeバージョン切り替え後など）
+hash -r
+```
+
+> [!tip] 使用場面
+> `n stable` 実行後など、コマンドのパスが変わった場合に使用
+
+### su - ユーザー切り替え
+
+> [!warning] `su` と `su -` の違い
+> ```bash
+> su      # 環境変数のほとんどは変わらず切り替え前のユーザーのものになる
+> su -    # 環境変数がリセットされ、切り替えたユーザーの環境になる
+> ```
+> ログインしてみると、**ホームディレクトリ**が違うのがわかる。
+
+---
+
+## ファイアウォール
+
+### firewall-cmd
+
+```bash
+# サービス追加
+firewall-cmd --permanent --zone=public --add-service=snmp
+
+# リッチルール追加
+firewall-cmd --permanent --zone=public --add-rich-rule="rule family=\"ipv4\" source address=\"202.61.19.225\" service name=\"snmp\" accept"
+
+# リッチルール削除
+firewall-cmd --permanent --zone=public --remove-rich-rule="rule family=\"ipv4\" source address=\"202.61.19.225\" service name=\"snmp\" accept"
+
+# 設定再読み込み
+firewall-cmd --reload
+
+# zone設定確認
+firewall-cmd --list-all --zone=home
+firewall-cmd --list-all-zones
+
+# アクティブゾーン確認
+firewall-cmd --get-active-zones
+
+# サービス名とポートの紐づけ確認
+cat /etc/services | grep snmp
+```
+
+---
+
+## ファイル転送
+
+### sftp
+
+```bash
+sftp root@192.168.1.1
+
+# 転送先の操作
+cd /hoge/fuga
+ls
+pwd
+
+# ローカルの操作
+lcd
+lpwd
+lls
+
+# ファイル転送（※上書きされる）
+put hoge.txt
+
+# ファイル取得
+get fuga.txt
+
+# 接続を閉じる
+exit
+```
+
+---
+
+## 時間設定
+
+### timedatectl (Ubuntu)
+
+```bash
+timedatectl set-timezone Asia/Tokyo
+```
+
+---
+
+## cron
+
+### crontab
+
+```bash
+# 設定確認
+crontab -l
+```
+
+---
+
+## ディスク・ラベル
+
+### xfs_admin
+
+```bash
+# ラベル確認
+xfs_admin -l /dev/sdo1
+
+# ラベル貼り付け
+umount /dev/sdo1
+xfs_admin -L O /dev/sdo1
+```
+
+---
+
+## SSH鍵
+
+### 暗号方式の選択
+
+> [!info] 2025年現在の推奨
+> - **実装や互換性重視**: RSA 2048bit または 4096bit
+> - **パフォーマンスやセキュリティ重視**: **EdDSA (Ed25519)** ← 推奨
+> - **使用非推奨**: DSA, ECDSA
+
+### EdDSA鍵の生成
+
+```bash
+# bit長は256bit固定
+ssh-keygen -t ed25519 -P "passphrase" -f keyname.pem
+```
+
+### PHPで使用する鍵ペア
+
+> [!warning] 注意
+> PHPで使用するキーペアは、`ssh-keygen`で生成したものは使えない場合がある。
+> `openssl`コマンドで生成した鍵は使用可能。
+
+```bash
+# RSA鍵ペア生成
+openssl genrsa 2048 > secret.key
+openssl rsa -in secret.key -pubout -out public.key
+```
+
+---
+
+## パッケージ管理
+
+### yum (RHEL/CentOS系)
+
+> [!warning] ディストリビューション注意
+> `yum`はRHEL/CentOS/Rocky Linux等で使用。
+> Ubuntu/Debian系では `apt` を使用すること。
+
+```bash
+# インストール済みパッケージ一覧
+yum list installed
+```
+
+### Let's Encrypt (certbot)
+
+```bash
+# インストール
+yum install certbot
+
+# バージョン確認
+certbot --version
+
+# 証明書の保存場所（ドメイン単位で作成）
+/etc/letsencrypt/live/
+```
+
+---
+
+## HTTP
+
+### curl
+
+```bash
+curl "https://httpbin.org/get?param1=ABC&param2=DEF"
+```
+
+---
+
+## 関連ドキュメント
+
+- [[postfix|Postfix設定]] - メールサーバー
+- [[server-settings|サーバー設定]] - SSH, sudo等
+- [[rc-local|rc.local]] - 起動スクリプト
+- [[setuid|SetUID]] - 特殊権限
+- [[Index|ホーム]] - 目次に戻る
+
+---
+
+*作成日: 2025年11月*
+

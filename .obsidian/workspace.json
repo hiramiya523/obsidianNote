@@ -1,0 +1,215 @@
+{
+  "main": {
+    "id": "4c00e810f9cb414f",
+    "type": "split",
+    "children": [
+      {
+        "id": "900aa3b0e57053a4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "73487ba899618aa5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Projects/tomoni-frontend-migration.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "tomoni-frontend-migration"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "71ad86fb3c450b13",
+    "type": "split",
+    "children": [
+      {
+        "id": "de35110feeddfcaf",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "98b29c9483f3a55c",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "2a284a3202711f83",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "1c02c11db0387a7c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "ブックマーク"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b9a4debae8ae8c51",
+    "type": "split",
+    "children": [
+      {
+        "id": "be07033286ce25d6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6ca22fc43ced9647",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Welcome.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Welcomeへのバックリンク"
+            }
+          },
+          {
+            "id": "74d894242134c551",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Welcome.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Welcomeからのアウトゴーイングリンク"
+            }
+          },
+          {
+            "id": "4a0c3c80b1fbb960",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "タグ"
+            }
+          },
+          {
+            "id": "fb1de7aac84e19c6",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "すべてのプロパティ"
+            }
+          },
+          {
+            "id": "bb4b843bf85ae556",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Welcome.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Welcomeのアウトライン"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "73487ba899618aa5",
+  "lastOpenFiles": [
+    "Database/sql-cheatsheet.md",
+    "Linux/commands-cheatsheet.md",
+    "Projects/tomoni-frontend-migration.md",
+    "Docker/fluent-bit-implementation.md",
+    "Linux/setuid.md",
+    "Linux/rc-local.md",
+    "Linux/server-settings.md",
+    "Linux/postfix.md",
+    "logging-container-faq.md",
+    "Docker/fluent-bit-faq.md",
+    "Docker/fluent-bit-introduction.md",
+    "Projects",
+    "Database",
+    "Linux",
+    "Docker",
+    "sql.md",
+    "setting.md",
+    "rc.local.md",
+    "postfix.md",
+    "cmd.md",
+    "sveltekit&ts_移行計画.md",
+    "setuid.md",
+    "logging-container-comparison.md",
+    "Readme.md",
+    "Index.md",
+    "Welcome.md"
+  ]
+}
