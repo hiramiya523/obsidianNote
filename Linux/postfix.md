@@ -152,11 +152,15 @@ sendmail -f sender@example.com recipient@example.com
 
 ## 関連ドキュメント
 
+### Linux関連
 - [[commands-cheatsheet|Linuxコマンド]] - 基本コマンド
-- [[server-settings|サーバー設定]] - SSH, sudo等
-- [[Index|ホーム]] - 目次に戻る
+- [[server-settings|サーバー設定]] - SSH, sudo, sysctl等
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 
 *作成日: 2025年11月*
+
 

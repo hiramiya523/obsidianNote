@@ -173,9 +173,14 @@ Remove-VMSwitch -SwitchName "NATSwitchForVM"
 
 ## 関連ドキュメント
 
-- [[Index|ホーム]] - 目次に戻る
+### 仮想化関連
+- [[../Linux/server-settings|サーバー設定]] - ネットワーク設定の参考
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 
 *作成日: 2025年11月*
+
 

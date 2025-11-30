@@ -49,11 +49,15 @@ chmod 700 /etc/rc.local
 
 ## 関連ドキュメント
 
-- [[server-settings|サーバー設定]] - SSH, sudo等
+### Linux関連
+- [[server-settings|サーバー設定]] - SSH, sudo, sysctl等
 - [[commands-cheatsheet|Linuxコマンド]] - 基本コマンド
-- [[Index|ホーム]] - 目次に戻る
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 
 *作成日: 2025年11月*
+
 

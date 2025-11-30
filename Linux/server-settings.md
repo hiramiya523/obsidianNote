@@ -90,12 +90,17 @@ sshd -t
 
 ## 関連ドキュメント
 
+### Linux関連
 - [[commands-cheatsheet|Linuxコマンド]] - 基本コマンド
 - [[setuid|SetUID]] - 特殊権限
 - [[rc-local|rc.local]] - 起動スクリプト
-- [[Index|ホーム]] - 目次に戻る
+- [[postfix|Postfix設定]] - メールサーバー
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 
 *作成日: 2025年11月*
+
 

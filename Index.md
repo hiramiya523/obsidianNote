@@ -52,12 +52,13 @@ aliases:
 | ドキュメント | 概要 |
 |-------------|------|
 | [[Frontend/sveltekit-notes\|SvelteKitメモ]] | SSR、$state、$derived、$bindable等 |
+| [[Frontend/svelte/QA\|SvelteKit Q&A]] | Sanctum認証・ユニバーサルfetchの実装 |
 
 ### 📋 Projects
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Projects/tomoni-frontend-migration\|TOMONI移行計画]] | SvelteKitへのフロントエンド移行 |
+| [[Projects/frontend-migration\|TOMONI移行計画]] | SvelteKitへのフロントエンド移行 |
 
 ---
 
@@ -79,6 +80,7 @@ aliases:
 ### フロントエンド
 - [[Frontend/sveltekit-notes#svelte-5-リアクティビティ|Svelte 5 リアクティビティ]]
 - [[Frontend/sveltekit-notes#bindable---親子間のバインド|$bindable の使い方]]
+- [[Frontend/svelte/QA|ユニバーサルfetch実装]]
 
 ### パフォーマンス
 - [[Database/sql-cheatsheet#パフォーマンス最適化|SQLパフォーマンス]]
@@ -120,11 +122,15 @@ aliases:
 ├── 📁 Database/             # データベース関連
 │   └── sql-cheatsheet.md
 ├── 📁 Frontend/             # フロントエンド関連
-│   └── sveltekit-notes.md
+│   ├── sveltekit-notes.md
+│   └── svelte/
+│       └── QA.md
 └── 📁 Projects/             # プロジェクト関連
-    └── tomoni-frontend-migration.md
+    └── frontend-migration.md
 ```
 
 ---
 
-*最終更新: 2025年11月*
+---
+
+*最終更新: 2025年11月28日*

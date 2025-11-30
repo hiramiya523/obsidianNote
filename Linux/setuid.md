@@ -75,11 +75,18 @@ chmod u+s samplepgm
 
 ## 関連ドキュメント
 
-- [[server-settings|サーバー設定]] - SSH, sudo等
+### Linux関連
+- [[server-settings|サーバー設定]] - SSH, sudo, sysctl等
 - [[commands-cheatsheet|Linuxコマンド]] - 基本コマンド
-- [[Index|ホーム]] - 目次に戻る
+
+### セキュリティ関連
+- [[server-settings#ssh設定|SSH設定]] - セキュリティ設定
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 
 *作成日: 2025年11月*
+
 

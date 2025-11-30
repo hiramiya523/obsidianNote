@@ -330,11 +330,14 @@ curl "https://httpbin.org/get?param1=ABC&param2=DEF"
 
 ## 関連ドキュメント
 
+### Linux関連
 - [[postfix|Postfix設定]] - メールサーバー
-- [[server-settings|サーバー設定]] - SSH, sudo等
+- [[server-settings|サーバー設定]] - SSH, sudo, sysctl等
 - [[rc-local|rc.local]] - 起動スクリプト
 - [[setuid|SetUID]] - 特殊権限
-- [[Index|ホーム]] - 目次に戻る
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 

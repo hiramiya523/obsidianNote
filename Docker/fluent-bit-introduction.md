@@ -232,9 +232,12 @@ graph TD
 
 ## 関連ドキュメント
 
+### Docker関連
 - [[fluent-bit-implementation|推奨構成]] - 具体的な実装計画
 - [[fluent-bit-faq|FAQ]] - よくある質問
-- [[Index|ホーム]] - 目次に戻る
+
+### その他
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 

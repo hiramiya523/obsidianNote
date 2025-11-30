@@ -179,10 +179,12 @@ export default {
 
 ## 関連ドキュメント
 
-- [[Projects/tomoni-frontend-migration|TOMONI移行計画]] - SvelteKit移行プロジェクト
-- [[Index|ホーム]] - 目次に戻る
+- [[svelte/QA|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
+- [[../Projects/frontend-migration|TOMONI移行計画]] - SvelteKit移行プロジェクト
+- [[../Index|ホーム]] - 目次に戻る
 
 ---
 
 *作成日: 2025年11月*
+
 
