@@ -20,7 +20,16 @@ aliases:
 
 ---
 
-## 質問: ユニバーサルfetchの実装方法
+## 目次
+
+1. [[#q1-ユニバーサルfetchの実装方法は|Q1: ユニバーサルfetchの実装方法は？]]
+2. [[#q2-pagetsと-pageservertsどちらを使うべきか|Q2: +page.tsと+page.server.tsどちらを使うべきか？]]
+3. [[#q3-環境変数の設定方法は|Q3: 環境変数の設定方法は？]]
+4. [[#q4-cookie名の設定は|Q4: Cookie名の設定は？]]
+
+---
+
+## Q1: ユニバーサルfetchの実装方法は？
 
 ### 要件
 
@@ -30,14 +39,10 @@ aliases:
 - Docker環境で名前解決が異なる（URLが変わる）
 - セッションcookieも使用している
 
-### 2025年11月現在のベストプラクティス
+### 回答
 
 > [!tip] 推奨アプローチ
 > 環境変数によるURL切り替え + SvelteKitの`event.fetch`を使用したユニバーサルfetch関数
-
----
-
-## 実装方法
 
 ### 1. 環境変数を使用したURL設定
 
@@ -45,8 +50,8 @@ aliases:
 
 ```typescript
 // ブラウザ環境用（PUBLIC_プレフィックスが必要）
-export const API_ORIGIN = 
-  typeof window !== 'undefined' 
+export const API_ORIGIN =
+  typeof window !== 'undefined'
     ? import.meta.env.PUBLIC_API_ORIGIN || 'http://middle-db.com'
     : import.meta.env.API_ORIGIN || 'http://php';
 
@@ -55,10 +60,9 @@ export const SERVER_API_ORIGIN = import.meta.env.API_ORIGIN || 'http://php';
 ```
 
 > [!info] 環境変数の違い
+>
 > - `PUBLIC_API_ORIGIN`: クライアント側用（ブラウザからアクセスするURL）
 > - `API_ORIGIN`: サーバー側用（Dockerコンテナ間通信用）
-
----
 
 ### 2. ユニバーサルfetch関数
 
@@ -73,7 +77,7 @@ interface FetchOptions extends RequestInit {
 
 /**
  * SSRとクライアントの両方で動作するユニバーサルfetch関数
- * 
+ *
  * @param fetch - SvelteKitのevent.fetch（+page.tsまたは+page.server.tsから取得）
  * @param path - APIエンドポイントのパス（例: '/reservations/dynamic_package/search'）
  * @param options - fetchオプション
@@ -86,7 +90,7 @@ export async function universalFetch(
   cookies?: any
 ): Promise<any> {
   const url = `${API_ORIGIN}${path}`;
-  
+
   // リクエストヘッダーの準備
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -101,11 +105,11 @@ export async function universalFetch(
   } else {
     // サーバー環境: cookiesが提供されている場合は転送
     if (cookies) {
-      const sessionCookie = cookies.get('middle_db_session');
+      const sessionCookie = cookies.get('xxxxx_session');
       const csrfCookie = cookies.get('XSRF-TOKEN');
-      
+
       if (sessionCookie) {
-        headers['Cookie'] = `middle_db_session=${sessionCookie}`;
+        headers['Cookie'] = `xxxxx_session=${sessionCookie}`;
         if (csrfCookie) {
           headers['Cookie'] += `; XSRF-TOKEN=${csrfCookie}`;
         }
@@ -120,17 +124,20 @@ export async function universalFetch(
       const csrfResponse = await fetch(`${API_ORIGIN}/sanctum/csrf-cookie`, {
         method: 'GET',
         credentials: 'include',
-        headers: cookies ? {
-          'Cookie': cookies.get('middle_db_session') 
-            ? `middle_db_session=${cookies.get('middle_db_session')}`
-            : ''
-        } : {}
+        headers: cookies
+          ? {
+              Cookie: cookies.get('xxxxx_session')
+                ? `xxxxx_session=${cookies.get('xxxxx_session')}`
+                : '',
+            }
+          : {},
       });
-      
+
       // XSRF-TOKENを取得してヘッダーに追加
-      const xsrfToken = cookies?.get('XSRF-TOKEN') || 
-                       document?.cookie?.match(/XSRF-TOKEN=([^;]+)/)?.[1];
-      
+      const xsrfToken =
+        cookies?.get('XSRF-TOKEN') ||
+        document?.cookie?.match(/XSRF-TOKEN=([^;]+)/)?.[1];
+
       if (xsrfToken) {
         headers['X-XSRF-TOKEN'] = decodeURIComponent(xsrfToken);
       }
@@ -158,6 +165,7 @@ export async function universalFetch(
 ```
 
 > [!info] 主な機能
+>
 > - **ブラウザ環境**: `credentials: "include"`でセッションcookieを自動送信
 > - **サーバー環境**: リクエストのcookieを転送（cookiesが提供されている場合）
 > - **SanctumのCSRFトークン**: 自動処理
@@ -165,36 +173,47 @@ export async function universalFetch(
 
 ---
 
-### 3. 使用例
+## Q2: +page.tsと+page.server.tsどちらを使うべきか？
 
-#### `+page.ts`（ユニバーサルload）で使用
+APIはログインセッションが無いとアクセスできないのと、LaravelがSanctumによるトークン認証を実装しています。どちらを使うべきでしょうか？
 
-```typescript
-import { universalFetch } from '$lib/api/fetch';
-import type { PageLoad } from './$types';
+> [!success] 結論
+> **今回のケース（ログインセッション必須、トークン認証、Laravel API）では、`+page.server.ts` を使用することを強く推奨します。**
 
-export const load: PageLoad = async ({ fetch }) => {
-  const data = await universalFetch(
-    fetch,
-    '/reservations/dynamic_package/search',
-    {
-      method: 'POST',
-      body: {
-        // 検索パラメータ
-        checkin_date: '2025-12-01',
-        checkout_date: '2025-12-05',
-      }
-    }
-  );
+### 比較表
 
-  return { data };
-};
-```
+| 特徴              | +page.ts           | +page.server.ts   |
+| ----------------- | ------------------ | ------------------ |
+| **実行環境**      | SSR + クライアント | SSRのみ            |
+| **cookiesアクセス** | ❌ 不可            | ✅ 可能             |
+| **セキュリティ**  | 中                 | 高（機密情報をサーバー側で処理） |
+| **推奨ケース**    | 公開データの取得   | 認証が必要なデータの取得 |
 
-> [!warning] 制限
-> `+page.ts`では`event.cookies`にアクセスできないため、`event.fetch`が自動的にcookieを転送することを期待します。
+### +page.tsの制限事項
 
-#### `+page.server.ts`（サーバーload）で使用（推奨）
+> [!warning] 重要な制限
+>
+> **1. Cookieへのアクセス不可**
+>
+> - SvelteKitは「サーバーでもクライアントでも同じコードが動くこと」を保証するため、サーバー実行時であっても `+page.ts` にはあえてCookieへのアクセス権限を与えていません
+> - `+page.ts`はCSR（クライアントサイドレンダリング）とSSR（サーバーサイドレンダリング）でも同じようなコードで動かす想定なので、`httpOnly`であることがほとんどであるcookieへのアクセスができません
+>
+> [!danger] SSR実行時の問題
+>
+> - SSR実行時に、**session無し状態でのリクエストとなるため、失敗可能性が高い**
+> - `event.fetch`が自動的にcookieを転送することを期待しますが、Sanctum認証では確実性が低い
+
+### +page.server.tsのメリット
+
+> [!tip] 推奨理由
+>
+> 1. **確実なCookieアクセス**: `cookies`オブジェクトから直接セッションcookieを取得可能
+> 2. **セキュリティ**: 機密情報（認証トークン等）をサーバー側で処理できる
+> 3. **確実な認証**: SSR実行時でも確実にセッション情報を送信できる
+
+### 使用例
+
+#### `+page.server.ts`で使用（推奨・認証必須の場合）
 
 ```typescript
 import { universalFetch } from '$lib/api/fetch';
@@ -210,21 +229,39 @@ export const load: PageServerLoad = async ({ fetch, cookies }) => {
         // 検索パラメータ
         checkin_date: '2025-12-01',
         checkout_date: '2025-12-05',
-      }
+      },
     },
-    cookies // cookiesを渡すことで、より確実に動作
+    cookies // cookiesを渡すことで、確実にセッション情報を送信
   );
 
   return { data };
 };
 ```
 
-> [!tip] 推奨
-> サーバー側でcookieを確実に処理する場合は、`+page.server.ts`を使用してください。
+#### `+page.ts`で使用（公開データの場合のみ）
+
+> [!warning] 使用制限
+> 認証が不要な公開データの取得にのみ使用してください。認証が必要なAPIでは使用しないでください。
+
+```typescript
+import { universalFetch } from '$lib/api/fetch';
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = async ({ fetch }) => {
+  // 公開データの取得例（認証不要）
+  const data = await universalFetch(fetch, '/public/articles', {
+    method: 'GET',
+  });
+
+  return { data };
+};
+```
 
 ---
 
-## 環境変数の設定
+## Q3: 環境変数の設定方法は？
+
+Docker環境で、クライアント側とサーバー側で異なるURLを使用する場合の環境変数の設定方法は？
 
 ### `.env`ファイルまたは`docker-compose.yml`
 
@@ -237,54 +274,28 @@ API_ORIGIN=http://php
 ```
 
 > [!info] SvelteKitの環境変数
+>
 > - `PUBLIC_`プレフィックス: クライアント側でも使用可能
 > - プレフィックスなし: サーバー側のみ使用可能
-
----
-
-## 注意事項
-
-### 1. Cookie名の設定
-
-Sanctumのセッションcookie名とCSRFトークンのcookie名を確認:
-
-- **セッションcookie**: `middle_db_session`（デフォルト）
-- **CSRFトークン**: `XSRF-TOKEN`（デフォルト）
-
-必要に応じて`fetch.ts`内で変更してください。
-
-### 2. Docker環境でのサーバー間通信
-
+>
 > [!warning] 注意
 > Docker環境では、サーバー間通信でcookieを明示的に設定する必要がある場合があります。
 > その場合は`+page.server.ts`を使用し、`cookies`パラメータを渡してください。
 
-### 3. +page.ts vs +page.server.ts
-
-| 特徴              | +page.ts     | +page.server.ts  |
-| --------------- | ------------ | ---------------- |
-| **実行環境**        | SSR + クライアント | SSRのみ            |
-| **cookiesアクセス** | ❌ 不可         | ✅ 可能             |
-| **セキュリティ**      | 中            | 高（機密情報をサーバー側で処理） |
-| **推奨ケース**       | 公開データの取得     | 認証が必要なデータの取得     |
-
 ---
 
+## Q4: Cookie名の設定は？
 
-# +page.tsか、+page.server.tsに記述するかで悩んでます。  
-apiはログインセッションが無いとアクセス出来ないのと、laravelがsunctomによるトークン認証を実装しています。
+Sanctumのセッションcookie名とCSRFトークンのcookie名は何ですか？
 
-今回のケース（ログインセッション必須、トークン認証、Laravel API）では、**+page.server.ts を使用することを強く推奨します**。
+デフォルトの設定:
 
+- **セッションcookie**: `xxxxx_session`（デフォルト）
+- **CSRFトークン**: `XSRF-TOKEN`（デフォルト）
 
-- SvelteKitは「サーバーでもクライアントでも同じコードが動くこと」を保証するため、サーバー実行時であっても +page.ts にはあえてCookieへのアクセス権限を与えていません。
-
-
-+page.tsはcsr,ssrでも同じようなコードで動かす想定なので、httpOnlyであることがほとんどであるcookieへのアクセスができない。
-ssr実行時に、session無し状態でのリクエストとなるため、失敗可能性が高い。
+必要に応じて`fetch.ts`内で変更してください。
 
 ---
-
 
 ## 関連ドキュメント
 
@@ -302,4 +313,6 @@ ssr実行時に、session無し状態でのリクエストとなるため、失�
 
 ---
 
-*作成日: 2025年11月*
+## 作成日
+
+2025年11月

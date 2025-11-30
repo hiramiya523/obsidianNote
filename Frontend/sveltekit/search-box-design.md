@@ -1,0 +1,808 @@
+---
+title: 検索ボックス共通化 - 設計思想とベストプラクティス
+created: 2025-11-28
+tags:
+  - sveltekit
+  - svelte
+  - frontend
+  - typescript
+  - component
+  - design-pattern
+  - best-practices
+aliases:
+  - SearchBox設計
+  - 検索ボックス設計
+---
+
+# 検索ボックス共通化 - 設計思想とベストプラクティス
+
+## 概要
+
+このドキュメントでは、検索ボックス共通化における設計の選択理由と、なぜこの設計がベストプラクティスなのかを詳しく説明します。
+
+## 目次
+
+1. [設計の全体像](#設計の全体像)
+2. [設計原則](#設計原則)
+3. [各設計選択の理由](#各設計選択の理由)
+4. [他のアプローチとの比較](#他のアプローチとの比較)
+5. [実装における重要な判断](#実装における重要な判断)
+6. [まとめ](#まとめ)
+
+---
+
+## 設計の全体像
+
+### 採用した設計パターン
+
+```
+┌─────────────────────────────────────────┐
+│  ページコンポーネント (使用側)          │
+│  - データ取得                           │
+│  - 検索設定生成                         │
+│  - 検索実行                             │
+└──────────────┬──────────────────────────┘
+               │
+               ▼
+┌─────────────────────────────────────────┐
+│  SearchBox (統合コンポーネント)          │
+│  - 条件管理                             │
+│  - フィールドレンダリング               │
+│  - イベントハンドリング                 │
+└──────────────┬──────────────────────────┘
+               │
+       ┌───────┴───────┬───────────┬──────────┐
+       ▼               ▼           ▼          ▼
+┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
+│ Input    │  │ Select   │  │ DateRange│  │ Checkbox │
+│ Field    │  │ Field    │  │ Field    │  │ Group    │
+└──────────┘  └──────────┘  └──────────┘  └──────────┘
+```
+
+### 設計の特徴
+
+1. **関心の分離**: 各コンポーネントが単一の責任を持つ
+2. **設定駆動**: UIの構造をデータで定義
+3. **型安全性**: TypeScriptで型を厳密に定義
+4. **再利用性**: コンポーネントと設定を独立して再利用可能
+
+---
+
+## 設計原則
+
+### 1. Single Responsibility Principle (単一責任の原則)
+
+各コンポーネントは1つのことだけを行うべきです。
+
+**例: InputFieldコンポーネント**
+
+```svelte
+<!-- ✅ 良い設計: テキスト入力だけに責任を持つ -->
+<script lang="ts">
+  interface Props {
+    label: string;
+    value: string;
+    placeholder?: string;
+    onInput?: (value: string) => void;
+  }
+</script>
+
+<!-- ❌ 悪い設計: 検索ロジックやAPI呼び出しも含む -->
+<script lang="ts">
+  // 検索実行、API呼び出し、データ変換なども含まれる
+</script>
+```
+
+**なぜ重要か**:
+- テストが容易になる
+- 変更の影響範囲が限定的
+- 再利用しやすい
+
+### 2. Open/Closed Principle (開放/閉鎖の原則)
+
+拡張に対して開いており、修正に対して閉じているべきです。
+
+**例: 新しいフィールドタイプの追加**
+
+```typescript
+// ✅ 良い設計: 既存コードを変更せずに拡張可能
+export type SearchFieldType = 
+  | "input" 
+  | "select" 
+  | "dateRange" 
+  | "checkboxGroup" 
+  | "hierarchicalSelect"
+  | "newFieldType"; // 新しいタイプを追加
+
+// SearchBox.svelte
+{#if field.type === "newFieldType"}
+  <NewFieldType {...field} />
+{/if}
+
+// ❌ 悪い設計: 既存のコンポーネントを修正する必要がある
+// すべてのフィールドが1つのコンポーネントに含まれている
+```
+
+**なぜ重要か**:
+- 既存の動作を壊さずに機能追加できる
+- バグのリスクを最小化
+- チーム開発でコンフリクトが起きにくい
+
+### 3. Dependency Inversion Principle (依存性逆転の原則)
+
+高レベルのモジュールは低レベルのモジュールに依存すべきではなく、両方とも抽象に依存すべきです。
+
+**例: 検索設定の抽象化**
+
+```typescript
+// ✅ 良い設計: 抽象的な設定に依存
+interface SearchRow {
+  gridCols: number;
+  fields: SearchField[];
+}
+
+function createPlanSearchConfig(...): SearchRow[] {
+  // 具体的な実装
+}
+
+// SearchBoxは具体的な実装ではなく、抽象的なSearchRowに依存
+<SearchBox rows={searchConfig} />
+
+// ❌ 悪い設計: 具体的な実装に依存
+function createPlanSearchConfig(...): PlanSearchRow[] {
+  // プラン専用の型
+}
+
+// SearchBoxがPlanSearchRowに依存してしまう
+```
+
+**なぜ重要か**:
+- 異なるページでも同じコンポーネントを使用できる
+- テスト時にモックを注入しやすい
+- 柔軟性が高い
+
+---
+
+## 各設計選択の理由
+
+### 1. 型定義の分離 (`types.ts`)
+
+**選択**: 型定義を`types.ts`に集約
+
+**理由**:
+
+#### ✅ メリット
+
+1. **循環参照の回避**
+   ```typescript
+   // ❌ 悪い設計: コンポーネント間で型をインポートすると循環参照が発生
+   // HierarchicalSelect.svelte
+   import type { HierarchicalItem } from "./InputField.svelte";
+   
+   // InputField.svelte
+   import type { HierarchicalItem } from "./HierarchicalSelect.svelte";
+   ```
+
+2. **名前の衝突を回避**
+   ```typescript
+   // ❌ 悪い設計: コンポーネント名と型名が衝突
+   import { InputField } from "./InputField.svelte"; // コンポーネント
+   import type { InputField } from "./InputField.svelte"; // 型
+   
+   // ✅ 良い設計: 型は別ファイルから
+   import InputField from "./InputField.svelte"; // コンポーネント
+   import type { InputFieldType } from "./types"; // 型
+   ```
+
+3. **再利用性の向上**
+   ```typescript
+   // types.tsから型をインポートすれば、どこからでも使用可能
+   import type { SearchField } from "$lib/components/search/types";
+   ```
+
+#### 📊 比較
+
+| アプローチ | メリット | デメリット |
+|-----------|---------|-----------|
+| **型を分離** | 循環参照なし、名前衝突なし、再利用性高い | ファイルが増える |
+| 各コンポーネントに型を定義 | ファイル数が少ない | 循環参照、名前衝突、再利用困難 |
+
+**結論**: 型定義の分離は、大規模なプロジェクトでは必須のベストプラクティスです。
+
+---
+
+### 2. コンポーネントの分離
+
+**選択**: 各フィールドタイプごとにコンポーネントを分離
+
+**理由**:
+
+#### ✅ メリット
+
+1. **関心の分離**
+   ```svelte
+   <!-- InputField.svelte: テキスト入力だけに集中 -->
+   <script lang="ts">
+     interface Props {
+       label: string;
+       value: string;
+       onInput?: (value: string) => void;
+     }
+   </script>
+   
+   <!-- SelectField.svelte: 選択肢だけに集中 -->
+   <script lang="ts">
+     interface Props {
+       label: string;
+       value: number;
+       options: Array<{ value: number; label: string }>;
+       onChange?: (value: number) => void;
+     }
+   </script>
+   ```
+
+2. **テストの容易さ**
+   ```typescript
+   // 各コンポーネントを独立してテスト可能
+   test('InputField should emit onInput event', () => {
+     // InputFieldだけをテスト
+   });
+   
+   test('SelectField should handle option selection', () => {
+     // SelectFieldだけをテスト
+   });
+   ```
+
+3. **再利用性**
+   ```svelte
+   <!-- 他の場所でもInputFieldを単独で使用可能 -->
+   <InputField label="名前" value={name} onInput={setName} />
+   ```
+
+#### ❌ 代替案の問題点
+
+**1つのコンポーネントにすべてを含める**
+
+```svelte
+<!-- ❌ 悪い設計: 1つのコンポーネントにすべてを含む -->
+<script lang="ts">
+  function renderField(field: SearchField) {
+    switch (field.type) {
+      case "input":
+        return renderInput(field);
+      case "select":
+        return renderSelect(field);
+      // ... すべてのタイプのロジックが1箇所に
+    }
+  }
+</script>
+```
+
+**問題点**:
+- コンポーネントが肥大化する
+- 変更の影響範囲が広い
+- テストが困難
+- 再利用できない
+
+**結論**: コンポーネントの分離は、保守性と再利用性の両立に不可欠です。
+
+---
+
+### 3. 設定の関数化
+
+**選択**: 検索設定を関数で生成 (`createPlanSearchConfig`, `createReservationSearchConfig`)
+
+**理由**:
+
+#### ✅ メリット
+
+1. **動的な設定生成**
+   ```typescript
+   // APIから取得したデータに基づいて設定を生成
+   const categoryTree = buildCategoryTree(categories);
+   const areaTree = buildAreaTree(areas);
+   const searchConfig = createPlanSearchConfig(categoryTree, areaTree);
+   ```
+
+2. **テストの容易さ**
+   ```typescript
+   // モックデータで設定を生成してテスト可能
+   const mockCategories = [...];
+   const mockAreas = [...];
+   const config = createPlanSearchConfig(mockCategories, mockAreas);
+   expect(config).toHaveLength(3);
+   ```
+
+3. **型安全性**
+   ```typescript
+   // TypeScriptが設定の構造を検証
+   const config: SearchRow[] = createPlanSearchConfig(...);
+   // 型が合わない場合はコンパイルエラー
+   ```
+
+#### ❌ 代替案の問題点
+
+**1. 設定をJSONファイルに保存**
+
+```json
+// ❌ 悪い設計: 静的なJSONファイル
+{
+  "rows": [
+    {
+      "gridCols": 4,
+      "fields": [...]
+    }
+  ]
+}
+```
+
+**問題点**:
+- 動的なデータ（APIレスポンス）を使用できない
+- 型チェックが効かない
+- 条件分岐ができない
+
+**2. 設定をコンポーネント内に直接記述**
+
+```svelte
+<!-- ❌ 悪い設計: 設定がコンポーネントに埋め込まれている -->
+<script lang="ts">
+  const searchConfig = [
+    {
+      gridCols: 4,
+      fields: [...]
+    }
+  ];
+</script>
+```
+
+**問題点**:
+- 他のページで再利用できない
+- テストが困難
+- 設定の変更がコンポーネントの変更を伴う
+
+**結論**: 設定の関数化は、柔軟性と再利用性を両立する最適な方法です。
+
+---
+
+### 4. データ変換の分離 (`hierarchicalHelpers.ts`)
+
+**選択**: APIレスポンスの変換ロジックをヘルパー関数に分離
+
+**理由**:
+
+#### ✅ メリット
+
+1. **関心の分離**
+   ```typescript
+   // データ変換のロジックが独立している
+   export function buildCategoryTree(categories: CategoryResponse[]): HierarchicalItem[] {
+     // 変換ロジック
+   }
+   
+   // ページコンポーネントは変換関数を呼ぶだけ
+   const categoryTree = buildCategoryTree(categories);
+   ```
+
+2. **再利用性**
+   ```typescript
+   // 複数のページで同じ変換関数を使用可能
+   // plans/+page.svelte
+   const categoryTree = buildCategoryTree(categories);
+   
+   // other-page/+page.svelte
+   const categoryTree = buildCategoryTree(categories);
+   ```
+
+3. **テストの容易さ**
+   ```typescript
+   // 変換関数を独立してテスト可能
+   test('buildCategoryTree should convert flat array to hierarchical structure', () => {
+     const input = [...];
+     const output = buildCategoryTree(input);
+     expect(output).toEqual([...]);
+   });
+   ```
+
+4. **柔軟性**
+   ```typescript
+   // APIレスポンスの構造が異なる場合でも対応可能
+   const categoryTree = 
+     categories[0]?.children !== undefined
+       ? convertCategoryTreeToHierarchical(categories) // 階層構造
+       : buildCategoryTree(categories); // フラット構造
+   ```
+
+#### ❌ 代替案の問題点
+
+**変換ロジックをページコンポーネントに記述**
+
+```svelte
+<!-- ❌ 悪い設計: 変換ロジックがページコンポーネントに含まれる -->
+<script lang="ts">
+  onMount(async () => {
+    const categories = await fetchCategories();
+    
+    // 変換ロジックがページコンポーネントに含まれる
+    const categoryTree = categories.map(cat => ({
+      id: cat.id,
+      s_name: cat.s_name,
+      children: cat.children?.map(child => ({
+        id: child.id,
+        s_name: child.s_name
+      })) || []
+    }));
+  });
+</script>
+```
+
+**問題点**:
+- 同じロジックが複数のページに重複
+- 変更時に複数箇所を修正する必要がある
+- テストが困難
+
+**結論**: データ変換の分離は、DRY原則（Don't Repeat Yourself）に従った設計です。
+
+---
+
+### 5. 親コンポーネントによる統合 (`SearchBox.svelte`)
+
+**選択**: `SearchBox`が各フィールドコンポーネントを統合
+
+**理由**:
+
+#### ✅ メリット
+
+1. **単一のインターフェース**
+   ```svelte
+   <!-- 使用側はSearchBoxだけを知っていれば良い -->
+   <SearchBox
+     rows={searchConfig}
+     condition={condition}
+     onConditionChange={handleConditionChange}
+     onSearch={handleSearch} />
+   ```
+
+2. **条件管理の一元化**
+   ```typescript
+   // SearchBoxが条件の更新を一元管理
+   function updateCondition(key: string, value: any) {
+     // ネストされたキーの処理
+     // 親が変更された場合の子のリセット
+     // すべてをSearchBoxが管理
+   }
+   ```
+
+3. **一貫性の確保**
+   ```svelte
+   <!-- すべての検索フォームが同じUI/UX -->
+   <SearchBox ... /> <!-- プラン検索 -->
+   <SearchBox ... /> <!-- 予約検索 -->
+   ```
+
+#### ❌ 代替案の問題点
+
+**各フィールドを直接使用**
+
+```svelte
+<!-- ❌ 悪い設計: 各フィールドを直接使用 -->
+<div class="search-box">
+  <InputField label="名前" value={condition.name} onInput={...} />
+  <SelectField label="ステータス" value={condition.status} onChange={...} />
+  <DateRangeField ... />
+  <!-- 条件管理が分散 -->
+  <!-- UIの一貫性が保てない -->
+</div>
+```
+
+**問題点**:
+- 条件管理が分散する
+- UIの一貫性が保てない
+- 親が変更された場合の子のリセットロジックが重複
+
+**結論**: 親コンポーネントによる統合は、複雑さを隠蔽し、使いやすさを向上させます。
+
+---
+
+## 他のアプローチとの比較
+
+### アプローチ1: すべてを1つのコンポーネントに含める
+
+```svelte
+<!-- ❌ 悪い設計 -->
+<script lang="ts">
+  // すべてのフィールドタイプのロジックが1箇所に
+  function renderField(field: SearchField) {
+    switch (field.type) {
+      case "input":
+        return renderInput(field);
+      case "select":
+        return renderSelect(field);
+      // ... 100行以上のコード
+    }
+  }
+</script>
+```
+
+**問題点**:
+- コンポーネントが肥大化（1000行以上になる可能性）
+- 変更の影響範囲が広い
+- テストが困難
+- 再利用できない
+
+**今回の設計の優位性**:
+- 各コンポーネントが100行以下
+- 変更の影響範囲が限定的
+- 各コンポーネントを独立してテスト可能
+- 各コンポーネントを再利用可能
+
+---
+
+### アプローチ2: 設定をJSONファイルに保存
+
+```json
+// ❌ 悪い設計
+{
+  "rows": [
+    {
+      "gridCols": 4,
+      "fields": [
+        {
+          "type": "input",
+          "label": "名前",
+          "key": "name"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**問題点**:
+- 動的なデータ（APIレスポンス）を使用できない
+- 型チェックが効かない
+- 条件分岐ができない
+- デバッグが困難
+
+**今回の設計の優位性**:
+- 関数内で動的に設定を生成可能
+- TypeScriptの型チェックが効く
+- 条件分岐が可能
+- デバッグが容易（ブレークポイントを設定可能）
+
+---
+
+### アプローチ3: 各ページで個別に実装
+
+```svelte
+<!-- ❌ 悪い設計: 各ページで個別に実装 -->
+<!-- plans/+page.svelte -->
+<div class="search-box">
+  <input type="text" ... />
+  <select ... />
+  <!-- プラン検索専用の実装 -->
+</div>
+
+<!-- reservations/+page.svelte -->
+<div class="search-box">
+  <input type="text" ... />
+  <select ... />
+  <!-- 予約検索専用の実装（重複） -->
+</div>
+```
+
+**問題点**:
+- コードの重複
+- UIの一貫性が保てない
+- バグ修正時に複数箇所を修正する必要がある
+- 機能追加時に複数箇所を修正する必要がある
+
+**今回の設計の優位性**:
+- コードの再利用
+- UIの一貫性が保証される
+- 1箇所の修正で全体に反映される
+- 1箇所に機能追加すれば全体で使用可能
+
+---
+
+## 実装における重要な判断
+
+### 1. Svelte 5のRunesモードの活用
+
+**選択**: `$state`, `$derived`, `$effect`を使用
+
+**理由**:
+
+```svelte
+<!-- ✅ 良い設計: Runesモードを使用 -->
+<script lang="ts">
+  let condition = $state<PlanSearchCondition>(createDefaultPlanSearchCondition());
+  const reactiveCondition = $derived(condition);
+  
+  const children = $derived.by(() => {
+    const currentParentId = parentId; // リアクティビティを確保
+    return findChildren(tree, currentParentId);
+  });
+</script>
+
+<!-- ❌ 悪い設計: 従来のリアクティブステートメント -->
+<script lang="ts">
+  let condition: PlanSearchCondition = createDefaultPlanSearchCondition();
+  $: reactiveCondition = condition; // 従来の方法
+  
+  $: children = findChildren(tree, parentId); // 従来の方法
+</script>
+```
+
+**なぜRunesモードが優れているか**:
+- 明示的なリアクティビティ（`$state`, `$derived`が明確）
+- 型安全性が高い
+- パフォーマンスが良い（必要な部分だけ再計算）
+- デバッグが容易
+
+---
+
+### 2. ネストされたキーの処理
+
+**選択**: `key.includes(".")`でネストされたキーを処理
+
+**理由**:
+
+```typescript
+// ✅ 良い設計: ネストされたキーを自動処理
+function getConditionValue(key: string): any {
+  if (key.includes(".")) {
+    const [parentKey, childKey] = key.split(".");
+    return reactiveCondition[parentKey]?.[childKey] ?? 0;
+  }
+  return reactiveCondition[key] ?? 0;
+}
+
+// 使用例
+getConditionValue("category.parent_id"); // condition.category.parent_id
+getConditionValue("s_name"); // condition.s_name
+```
+
+**なぜこの方法が優れているか**:
+- フラットなキーとネストされたキーの両方に対応
+- 設定側でキーを指定するだけで動作
+- 実装がシンプル
+
+**代替案の問題点**:
+
+```typescript
+// ❌ 悪い設計: 各フィールドタイプごとに異なる処理
+function getInputValue(key: string) {
+  return condition[key];
+}
+
+function getCategoryValue(key: string) {
+  return condition.category[key];
+}
+
+function getAreaValue(key: string) {
+  return condition.area[key];
+}
+```
+
+**問題点**:
+- コードの重複
+- 新しいネスト構造を追加するたびに新しい関数が必要
+- 保守性が低い
+
+---
+
+### 3. 親が変更された場合の子のリセット
+
+**選択**: `updateCondition`内で自動的に子をリセット
+
+**理由**:
+
+```typescript
+// ✅ 良い設計: 親が変更された場合、自動的に子をリセット
+function updateCondition(key: string, value: any) {
+  if (key.includes(".")) {
+    const [parentKey, childKey] = key.split(".");
+    const updatedCondition = {
+      ...reactiveCondition,
+      [parentKey]: {
+        ...reactiveCondition[parentKey],
+        [childKey]: value,
+      },
+    };
+
+    // 親が変更された場合、子をリセット
+    if (childKey === "parent_id" && parentKey === "category") {
+      updatedCondition.category.id = 0;
+    } else if (childKey === "pref_id" && parentKey === "area") {
+      updatedCondition.area.parent_id = 0;
+      updatedCondition.area.id = 0;
+    }
+
+    onConditionChange(updatedCondition);
+  }
+}
+```
+
+**なぜこの方法が優れているか**:
+- 使用側で子のリセットを意識する必要がない
+- 一貫した動作が保証される
+- バグのリスクが低い
+
+**代替案の問題点**:
+
+```svelte
+<!-- ❌ 悪い設計: 使用側で子のリセットを手動で行う -->
+<HierarchicalSelect
+  onChange={(value) => {
+    condition.category.parent_id = value;
+    condition.category.id = 0; // 手動でリセット（忘れやすい）
+  }} />
+```
+
+**問題点**:
+- 使用側で子のリセットを忘れる可能性がある
+- コードの重複
+- バグのリスクが高い
+
+---
+
+### 4. リアクティビティの確保
+
+**選択**: `$derived.by()`内で直接propsを参照
+
+**理由**:
+
+```svelte
+<!-- ✅ 良い設計: 直接propsを参照 -->
+<script lang="ts">
+  const children = $derived.by(() => {
+    const currentParentId = parentId; // 直接参照
+    const parent = findItemById(tree, currentParentId);
+    return parent?.children || [];
+  });
+</script>
+
+<!-- ❌ 悪い設計: @constを使用 -->
+<script lang="ts">
+  {@const parentValue = getConditionValue(field.parentKey)}
+  <HierarchicalSelect parentId={parentValue} />
+</script>
+```
+
+**なぜ直接参照が優れているか**:
+- `@const`は一度だけ評価されるため、`parentId`が変更されても再計算されない
+- `$derived.by()`内で直接参照することで、リアクティビティが確保される
+- 変更が即座に反映される
+
+---
+
+## まとめ
+
+### 今回の設計がベストプラクティスである理由
+
+1. **関心の分離**: 各コンポーネントが単一の責任を持つ
+2. **再利用性**: コンポーネントと設定を独立して再利用可能
+3. **型安全性**: TypeScriptで型を厳密に定義
+4. **保守性**: 変更の影響範囲が限定的
+5. **テスト容易性**: 各コンポーネントを独立してテスト可能
+6. **拡張性**: 既存コードを変更せずに機能追加可能
+7. **一貫性**: 同じUI/UXを提供できる
+
+### 設計原則の適用
+
+- **SOLID原則**: Single Responsibility, Open/Closed, Dependency Inversion
+- **DRY原則**: Don't Repeat Yourself
+- **KISS原則**: Keep It Simple, Stupid
+
+### 実装における重要な判断
+
+1. **型定義の分離**: 循環参照と名前衝突を回避
+2. **コンポーネントの分離**: 保守性と再利用性を両立
+3. **設定の関数化**: 柔軟性と型安全性を確保
+4. **データ変換の分離**: DRY原則に従う
+5. **親コンポーネントによる統合**: 複雑さを隠蔽し、使いやすさを向上
+
+これらの設計選択により、**保守性、拡張性、再利用性、テスト容易性**のすべてを高いレベルで実現できています。これが、今回の設計がベストプラクティスである理由です。
+
+実装の詳細については、[実装ガイド](./search-box-implementation.md)を参照してください。
+

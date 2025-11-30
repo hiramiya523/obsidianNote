@@ -1,0 +1,618 @@
+---
+title: 検索ボックス共通化 - 実装ガイド
+created: 2025-11-28
+tags:
+  - sveltekit
+  - svelte
+  - frontend
+  - typescript
+  - component
+  - implementation
+aliases:
+  - SearchBox実装
+  - 検索ボックス実装
+---
+
+# 検索ボックス共通化 - 実装ガイド
+
+## 概要
+
+このドキュメントでは、Svelte 5アプリケーションで検索ボックスを共通コンポーネント化する方法を、ステップバイステップで説明します。
+
+## 目次
+
+1. [なぜ共通化するのか](#なぜ共通化するのか)
+2. [アーキテクチャの設計](#アーキテクチャの設計)
+3. [実装ステップ](#実装ステップ)
+4. [使用例](#使用例)
+5. [よくある問題と解決策](#よくある問題と解決策)
+6. [ベストプラクティス](#ベストプラクティス)
+
+---
+
+## なぜ共通化するのか
+
+### 問題点
+
+- 各ページで検索フォームを個別に実装すると、コードが重複する
+- UIの一貫性を保つのが難しい
+- バグ修正や機能追加の際に、複数箇所を修正する必要がある
+
+### 共通化のメリット
+
+- **コードの再利用**: 一度実装すれば、複数のページで使用可能
+- **保守性の向上**: 1箇所の修正で全体に反映される
+- **一貫性の確保**: 同じUI/UXを提供できる
+- **開発効率の向上**: 新しいページでもすぐに検索機能を追加できる
+
+---
+
+## アーキテクチャの設計
+
+### コンポーネント階層
+
+```
+SearchBox (親コンポーネント)
+├── InputField (テキスト入力)
+├── SelectField (選択肢)
+├── DateRangeField (日付範囲)
+├── CheckboxGroup (チェックボックスグループ)
+└── HierarchicalSelect (階層選択)
+```
+
+### データフロー
+
+```
+1. ページコンポーネント
+   ↓ (検索設定を生成)
+2. SearchBox
+   ↓ (条件を管理)
+3. 各フィールドコンポーネント
+   ↓ (ユーザー入力)
+4. SearchBox
+   ↓ (条件を更新)
+5. ページコンポーネント
+   ↓ (検索実行)
+6. API
+```
+
+---
+
+## 実装ステップ
+
+### ステップ1: 型定義の作成
+
+まず、検索フィールドの型を定義します。
+
+**ファイル**: `src/lib/components/search/types.ts`
+
+```typescript
+// 検索フィールドの型
+export type SearchFieldType = "input" | "select" | "dateRange" | "checkboxGroup" | "hierarchicalSelect";
+
+// 基本フィールド型
+export interface BaseSearchField {
+  type: SearchFieldType;
+  label: string;
+  colSpan?: number;
+}
+
+// 各フィールド型の定義
+export interface InputFieldType extends BaseSearchField {
+  type: "input";
+  key: string;
+  placeholder?: string;
+}
+
+export interface SelectFieldType extends BaseSearchField {
+  type: "select";
+  key: string;
+  options: Array<{ value: string | number; label: string }>;
+}
+
+export interface DateRangeFieldType extends BaseSearchField {
+  type: "dateRange";
+  key: string;
+  startKey: string;
+  endKey: string;
+}
+
+export interface CheckboxGroupFieldType extends BaseSearchField {
+  type: "checkboxGroup";
+  key: string;
+  options: Array<{ value: string | number; label: string }>;
+}
+
+export interface HierarchicalSelectFieldType extends BaseSearchField {
+  type: "hierarchicalSelect";
+  key: string;
+  level: number;
+  tree: HierarchicalItem[];
+  parentKey?: string;
+}
+
+// すべてのフィールド型のユニオン
+export type SearchField = 
+  | InputFieldType 
+  | SelectFieldType 
+  | DateRangeFieldType 
+  | CheckboxGroupFieldType 
+  | HierarchicalSelectFieldType;
+
+// 検索行の型
+export interface SearchRow {
+  gridCols: number;
+  fields: SearchField[];
+}
+
+// 階層アイテムの型
+export interface HierarchicalItem {
+  id: number;
+  s_name: string;
+  children?: HierarchicalItem[];
+}
+```
+
+**ポイント**:
+- 型を明確に定義することで、TypeScriptの型チェックが効く
+- 各フィールドタイプごとに必要なプロパティを定義
+- ユニオン型で型安全性を確保
+
+---
+
+### ステップ2: 個別フィールドコンポーネントの作成
+
+各フィールドタイプに対応するコンポーネントを作成します。
+
+**例: InputField.svelte**
+
+```svelte
+<script lang="ts">
+  interface Props {
+    label: string;
+    value: string;
+    placeholder?: string;
+    colSpan?: number;
+    onInput?: (value: string) => void;
+  }
+
+  let { label, value, placeholder = "", colSpan = 1, onInput }: Props = $props();
+</script>
+
+<div style="grid-column: span {colSpan};">
+  <label class="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+  <input
+    type="text"
+    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    {placeholder}
+    {value}
+    oninput={(e) => onInput?.((e.target as HTMLInputElement).value)} />
+</div>
+```
+
+**ポイント**:
+- 各コンポーネントは独立して動作する
+- propsで必要な情報を受け取る
+- `onInput`などのコールバックで親に通知
+
+---
+
+### ステップ3: SearchBoxコンポーネントの作成
+
+各フィールドコンポーネントを統合する親コンポーネントを作成します。
+
+**ファイル**: `src/lib/components/search/SearchBox.svelte`
+
+```svelte
+<script lang="ts">
+  import InputField from "./InputField.svelte";
+  import SelectField from "./SelectField.svelte";
+  import DateRangeField from "./DateRangeField.svelte";
+  import CheckboxGroup from "./CheckboxGroup.svelte";
+  import HierarchicalSelect from "./HierarchicalSelect.svelte";
+  import type { SearchRow } from "./types";
+
+  interface Props<T = Record<string, any>> {
+    rows: SearchRow[];
+    condition: T;
+    onConditionChange: (condition: T) => void;
+    onSearch: () => void;
+  }
+
+  let { rows, condition, onConditionChange, onSearch }: Props<any> = $props();
+
+  // conditionをリアクティブに追跡
+  const reactiveCondition = $derived(condition);
+
+  // 条件値を取得する関数
+  function getConditionValue(key: string): any {
+    if (key.includes(".")) {
+      const [parentKey, childKey] = key.split(".");
+      return reactiveCondition[parentKey]?.[childKey] ?? 0;
+    }
+    return reactiveCondition[key] ?? "";
+  }
+
+  // 条件を更新する関数
+  function updateCondition(key: string, value: any) {
+    // ネストされたキーの処理
+    if (key.includes(".")) {
+      const [parentKey, childKey] = key.split(".");
+      const updatedCondition = {
+        ...reactiveCondition,
+        [parentKey]: {
+          ...reactiveCondition[parentKey],
+          [childKey]: value,
+        },
+      };
+
+      // 親が変更された場合、子をリセット
+      if (childKey === "parent_id" && parentKey === "category") {
+        updatedCondition.category.id = 0;
+      } else if (childKey === "pref_id" && parentKey === "area") {
+        updatedCondition.area.parent_id = 0;
+        updatedCondition.area.id = 0;
+      }
+
+      onConditionChange(updatedCondition);
+    } else {
+      onConditionChange({ ...reactiveCondition, [key]: value });
+    }
+  }
+</script>
+
+<div class="border border-gray-200 rounded-lg p-4 mb-4">
+  <details class="group">
+    <summary class="cursor-pointer font-medium text-gray-700">検索条件</summary>
+    <div class="mt-4 space-y-4">
+      {#each rows as row}
+        <div class="grid gap-4" style="grid-template-columns: repeat({row.gridCols}, minmax(0, 1fr));">
+          {#each row.fields as field}
+            {#if field.type === "input"}
+              <InputField
+                label={field.label}
+                value={getConditionValue(field.key)}
+                placeholder={field.placeholder}
+                colSpan={field.colSpan}
+                onInput={(value) => updateCondition(field.key, value)} />
+            {:else if field.type === "select"}
+              <SelectField
+                label={field.label}
+                value={getConditionValue(field.key)}
+                options={field.options}
+                colSpan={field.colSpan}
+                onChange={(value) => updateCondition(field.key, value)} />
+            {:else if field.type === "hierarchicalSelect"}
+              <HierarchicalSelect
+                label={field.label}
+                parentId={field.parentKey ? getConditionValue(field.parentKey) : undefined}
+                value={getConditionValue(field.key)}
+                level={field.level}
+                tree={field.tree}
+                colSpan={field.colSpan}
+                onChange={(value) => updateCondition(field.key, value)} />
+            {/if}
+          {/each}
+        </div>
+      {/each}
+      <div class="flex justify-end mt-4">
+        <button
+          type="button"
+          onclick={onSearch}
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          検索
+        </button>
+      </div>
+    </div>
+  </details>
+</div>
+```
+
+**ポイント**:
+- `rows`プロパティで検索設定を受け取る
+- `condition`で検索条件を管理
+- `getConditionValue`でネストされたキーも処理
+- `updateCondition`で条件を更新し、親に通知
+
+---
+
+### ステップ4: 検索設定の作成
+
+各ページ用の検索設定を生成する関数を作成します。
+
+**ファイル**: `src/lib/components/search/planSearchConfig.ts`
+
+```typescript
+import type { SearchRow, HierarchicalItem, HierarchicalSelectFieldType } from "./types";
+
+export function createPlanSearchConfig(
+  categoryTree: HierarchicalItem[],
+  areaTree: HierarchicalItem[]
+): SearchRow[] {
+  return [
+    {
+      gridCols: 4,
+      fields: [
+        {
+          type: "hierarchicalSelect",
+          label: "カテゴリ",
+          key: "category.parent_id",
+          level: 1,
+          tree: categoryTree,
+          colSpan: 1,
+        } as HierarchicalSelectFieldType,
+        {
+          type: "hierarchicalSelect",
+          label: "小カテゴリ",
+          key: "category.id",
+          level: 2,
+          parentKey: "category.parent_id",
+          tree: categoryTree,
+          colSpan: 1,
+        } as HierarchicalSelectFieldType,
+        {
+          type: "input",
+          label: "プラン名",
+          key: "s_name",
+          placeholder: "プラン名を入力",
+          colSpan: 2,
+        },
+      ],
+    },
+    // ... 他の行も同様に定義
+  ];
+}
+
+export interface PlanSearchCondition {
+  category: {
+    parent_id: number;
+    id: number;
+  };
+  area: {
+    pref_id: number;
+    parent_id: number;
+    id: number;
+  };
+  s_name: string;
+  // ... 他の条件
+}
+
+export function createDefaultPlanSearchCondition(): PlanSearchCondition {
+  return {
+    category: {
+      parent_id: 0,
+      id: 0,
+    },
+    area: {
+      pref_id: 0,
+      parent_id: 0,
+      id: 0,
+    },
+    s_name: "",
+  };
+}
+```
+
+**ポイント**:
+- 検索設定を関数で生成することで、再利用可能
+- データ構造を定義するだけで、UIが自動生成される
+- ページごとに異なる設定を簡単に作成できる
+
+---
+
+### ステップ5: ページでの使用
+
+実際のページで`SearchBox`を使用します。
+
+**ファイル**: `src/routes/plans/+page.svelte`
+
+```svelte
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { SearchBox } from "$lib/components/search";
+  import {
+    createPlanSearchConfig,
+    createDefaultPlanSearchCondition,
+    type PlanSearchCondition,
+  } from "$lib/components/search/planSearchConfig";
+  import { buildCategoryTree, buildAreaTree } from "$lib/components/search/hierarchicalHelpers";
+
+  let condition = $state<PlanSearchCondition>(createDefaultPlanSearchCondition());
+  let searchConfig = $state<any[]>([]);
+
+  onMount(async () => {
+    // 必要なデータを取得
+    const [categories, areas] = await Promise.all([
+      appFrontFetch(`${API_ROOT_URI}/master/categories`, "GET"),
+      appFrontFetch(`${API_ROOT_URI}/master/areas`, "GET"),
+    ]);
+
+    // データを階層構造に変換
+    const categoryTree = buildCategoryTree(categories);
+    const areaTree = buildAreaTree(areas);
+
+    // 検索設定を生成
+    searchConfig = createPlanSearchConfig(categoryTree, areaTree);
+  });
+
+  async function handleSearch() {
+    const response = await appFrontFetch(`${API_ROOT_URI}/master/plans/search`, "POST", {
+      ...condition,
+      limit: 100,
+      offset: 0,
+    });
+    // 結果を処理
+  }
+</script>
+
+<SearchBox
+  rows={searchConfig}
+  {condition}
+  onConditionChange={(newCondition) => {
+    condition = newCondition;
+  }}
+  onSearch={handleSearch} />
+```
+
+**ポイント**:
+- `createPlanSearchConfig`で検索設定を生成
+- `createDefaultPlanSearchCondition`で初期条件を設定
+- `SearchBox`に設定と条件を渡すだけ
+
+---
+
+## 使用例
+
+### 例1: プラン検索ページ
+
+```typescript
+// 1. 必要なデータを取得
+const [categories, areas] = await Promise.all([
+  appFrontFetch(`${API_ROOT_URI}/master/categories`, "GET"),
+  appFrontFetch(`${API_ROOT_URI}/master/areas`, "GET"),
+]);
+
+// 2. データを階層構造に変換
+const categoryTree = buildCategoryTree(categories);
+const areaTree = buildAreaTree(areas);
+
+// 3. 検索設定を生成
+const searchConfig = createPlanSearchConfig(categoryTree, areaTree);
+
+// 4. SearchBoxを使用
+<SearchBox rows={searchConfig} condition={condition} onConditionChange={...} onSearch={...} />
+```
+
+### 例2: 予約検索ページ
+
+```typescript
+// 1. 必要なデータを取得
+const [agents, reservationLanguages, enums] = await Promise.all([
+  appFrontFetch(`${API_ROOT_URI}/master/agents`, "GET"),
+  appFrontFetch(`${API_ROOT_URI}/master/reservation_languages`, "GET"),
+  appFrontFetch(`${API_ROOT_URI}/enums`, "GET"),
+]);
+
+// 2. enumデータを変換
+const reservationStatuses = enums.ReservationStatus.filter(...);
+const paymentStatuses = enums.PaymentStatus.filter(...);
+
+// 3. 検索設定を生成
+const searchConfig = createReservationSearchConfig(
+  agents,
+  reservationStatuses,
+  paymentStatuses,
+  reservationLanguages
+);
+
+// 4. SearchBoxを使用
+<SearchBox rows={searchConfig} condition={condition} onConditionChange={...} onSearch={...} />
+```
+
+---
+
+## よくある問題と解決策
+
+### 問題1: 階層選択で子要素が表示されない
+
+**原因**: `parentId`が変更されても、`children`が再計算されない
+
+**解決策**: `$derived.by()`内で`parentId`を直接参照する
+
+```typescript
+const children = $derived.by(() => {
+  if (level === 1) {
+    return tree;
+  }
+  const currentParentId = parentId; // 直接参照することでリアクティビティを確保
+  const parent = findItemById(tree, currentParentId);
+  return parent?.children || [];
+});
+```
+
+### 問題2: 選択した値が画面に表示されない
+
+**原因**: `select`要素の`value`属性が正しく更新されない
+
+**解決策**: `String(value)`を直接使用する
+
+```svelte
+<select value={String(value)} onchange={handleChange}>
+```
+
+### 問題3: 条件が変更されても再計算されない
+
+**原因**: `@const`は一度だけ評価されるため、`condition`が変更されても再計算されない
+
+**解決策**: `@const`を削除し、直接`getConditionValue()`を呼び出す
+
+```svelte
+<!-- ❌ 悪い例 -->
+{@const parentValue = getConditionValue(field.parentKey)}
+<HierarchicalSelect parentId={parentValue} />
+
+<!-- ✅ 良い例 -->
+<HierarchicalSelect parentId={getConditionValue(field.parentKey)} />
+```
+
+### 問題4: 型エラーが発生する
+
+**原因**: Svelteコンポーネントから型をインポートできない
+
+**解決策**: 型定義を別の`.ts`ファイルに分離する
+
+```typescript
+// types.ts
+export interface HierarchicalItem {
+  id: number;
+  s_name: string;
+  children?: HierarchicalItem[];
+}
+
+// HierarchicalSelect.svelte
+import type { HierarchicalItem } from "./types";
+```
+
+---
+
+## ベストプラクティス
+
+### 1. 型定義の分離
+
+- コンポーネントと型を分離する
+- `types.ts`に型定義を集約する
+- コンポーネント名と型名の重複を避ける
+
+### 2. リアクティビティの確保
+
+- `$derived`を使ってリアクティブな値を計算
+- propsの変更を正しく追跡する
+- `@const`の使用を避ける（再計算されないため）
+
+### 3. データ変換の分離
+
+- APIレスポンスの変換ロジックをヘルパー関数に分離
+- フラットな配列と階層構造の両方に対応
+- 変換関数を再利用可能にする
+
+### 4. 設定の関数化
+
+- 検索設定を関数で生成する
+- ページごとに異なる設定を簡単に作成できる
+- デフォルト値の設定も関数化する
+
+---
+
+## まとめ
+
+検索ボックスを共通化することで、以下のメリットが得られます：
+
+1. **コードの再利用**: 一度実装すれば、複数のページで使用可能
+2. **保守性の向上**: 1箇所の修正で全体に反映される
+3. **一貫性の確保**: 同じUI/UXを提供できる
+4. **開発効率の向上**: 新しいページでもすぐに検索機能を追加できる
+
+実装のポイントは、型定義の明確化、リアクティビティの確保、設定の関数化です。
+
+詳細な設計思想については、[設計思想とベストプラクティス](./search-box-design.md)を参照してください。
+
