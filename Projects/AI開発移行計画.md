@@ -509,7 +509,7 @@ IDDの練習として、新機能開発時に「CursorのComposer機能」など
 
 ## 関連ノート
 
-- [[Sveltekit導入計画]]
+- [[Projects/Sveltekit導入計画|SvelteKit導入計画]] - フロントエンド移行計画（TypeScriptとAI共同開発についても言及）
 - [[Frontend/sveltekit/search-box-implementation|検索ボックス実装ガイド]]
 - [[Frontend/sveltekit/search-box-design|検索ボックス設計思想]]
 

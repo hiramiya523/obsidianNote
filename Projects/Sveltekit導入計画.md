@@ -404,6 +404,9 @@ interface ModifyData {
 今後5年を見据えると、**AIとの共同開発**や**仕様駆動開発（SDD: Spec-Driven Development / Specification-Driven Development）**が主流になると予想されている。
 これらの開発手法では、仕様書や型定義からコードを生成するため、**型情報が仕様書として機能するTypeScriptが不可欠**となる。
 
+> [!info] 関連ドキュメント
+> SDD/IDDについての詳細な計画は、[[Projects/AI開発移行計画|AI開発移行計画]]を参照。
+
 **仕様駆動開発（SDD）でのTypeScriptの重要性**:
 
 仕様駆動開発では、仕様書からコードを自動生成するため、**型定義が仕様書として機能する**。
@@ -1323,8 +1326,17 @@ Svelte/SvelteKitは、現在のトレンドであり、将来性も期待でき�
 
 ## 関連ドキュメント
 
-- [[../Frontend/sveltekit-notes|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
-- [[../Frontend/svelte/QA|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
-- [[../Index|ホーム]] - 目次に戻る
+### SvelteKit関連
+- [[Frontend/sveltekit-notes|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
+- [[Frontend/svelte/QA|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
+- [[Frontend/sveltekit/search-box-design|検索ボックス設計]] - SvelteKitでの検索機能の設計
+- [[Frontend/sveltekit/search-box-implementation|検索ボックス実装]] - SvelteKitでの検索機能の実装
+
+### 関連プロジェクト
+- [[Projects/AI開発移行計画|AI開発移行計画]] - SDD/IDDについての詳細な計画
+- [[Projects/テストカバレッジ改善計画|テストカバレッジ改善計画]] - テスト戦略の改善計画
+
+### ナビゲーション
+- [[Index|ホーム]] - ナレッジベースの目次に戻る
 
 ---

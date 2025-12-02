@@ -25,18 +25,13 @@
             "id": "192a5ed5e7a6b708",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Projects/Sveltekit導入計画.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Sveltekit導入計画"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -89,8 +84,7 @@
               "title": "ブックマーク"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -211,13 +205,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "192a5ed5e7a6b708",
+  "active": "6291a00b95ca1964",
   "lastOpenFiles": [
-    "Frontend/sveltekit/search-box-design.md",
     "Projects/Sveltekit導入計画.md",
+    "Projects/AI開発移行計画.md",
+    "Frontend/sveltekit/search-box-design.md",
     "Projects/テストカバレッジ改善計画.md",
     "Projects/テストカバレッジ指標の説明.md",
-    "Projects/AI開発移行計画.md",
     "テストカバレッジ指標の説明.md",
     "テストカバレッジ改善アドバイス.md",
     "Untitled.canvas",

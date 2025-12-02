@@ -300,7 +300,7 @@ Sanctumのセッションcookie名とCSRFトークンのcookie名は何ですか
 ## 関連ドキュメント
 
 - [[../sveltekit-notes|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
-- [[Sveltekit導入計画|TOMONI移行計画]] - フロントエンド移行プロジェクト
+- [[Projects/Sveltekit導入計画|SvelteKit導入計画]] - フロントエンド移行プロジェクト
 - [[../../Index|ホーム]] - 目次に戻る
 
 ---
