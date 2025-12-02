@@ -724,6 +724,98 @@ Alpine.data("app", () => {
 // → レイアウトの共有
 ```
 
+#### 多言語対応: ルーティング機能による自然な実装
+
+**現状（Alpine.js/素のJS）の問題**:
+```javascript
+// URLから多言語情報をスクリプトで抜き出す必要がある
+let LANG_CODE = "en";
+let LANG_PATH = "";
+let pathname = location.pathname;
+
+if (location.pathname.match(/^\/(dynamic\/)?((en|ja|tw)\/)?widget\//)) {
+  pathname = parent.location.pathname;
+}
+
+// 複雑な条件分岐と正規表現による言語コードの抽出
+// iframeの場合の親フレームのURL取得が必要
+// エラーハンドリングが複雑
+```
+
+> [!bug] 現状の問題点
+> - **URL解析の複雑さ**: 正規表現と条件分岐で言語コードを抽出する必要がある
+> - **iframe対応の複雑さ**: 親フレームのURLを取得する必要があり、エッジケースが多い
+> - **保守性**: URL構造が変更されると、複数箇所のコードを修正する必要がある
+> - **型安全性の欠如**: 言語コードが文字列として扱われ、型チェックが効かない
+
+**SvelteKitでの解決**:
+```svelte
+// src/routes/[lang]/widget/+page.svelte
+// → /en/widget, /ja/widget, /tw/widget に自動的にルーティング
+
+<script lang="ts">
+  import { page } from '$app/stores';
+  
+  // ルーティングパラメータから言語コードを取得（型安全）
+  let lang = $derived($page.params.lang as 'en' | 'ja' | 'tw');
+  
+  // 言語コードに基づいた処理
+  let title = $derived(getTitle(lang));
+  
+  function getTitle(lang: 'en' | 'ja' | 'tw'): string {
+    const titles = {
+      en: 'Widget',
+      ja: 'ウィジェット',
+      tw: '小工具'
+    };
+    return titles[lang];
+  }
+</script>
+
+<h1>{title}</h1>
+```
+
+```svelte
+// src/routes/[lang]/dynamic/widget/+page.svelte
+// → /en/dynamic/widget, /ja/dynamic/widget にも対応
+
+<script lang="ts">
+  import { page } from '$app/stores';
+  
+  // 同じように$page.params.langで言語コードを取得可能
+  let lang = $derived($page.params.lang as 'en' | 'ja' | 'tw');
+</script>
+```
+
+```svelte
+// src/routes/+layout.svelte: 全ページで言語コードを利用可能
+<script lang="ts">
+  import { page } from '$app/stores';
+  
+  // レイアウトレベルで言語コードを取得し、子コンポーネントに渡す
+  let lang = $derived($page.params.lang as 'en' | 'ja' | 'tw' | undefined);
+</script>
+
+<!-- 言語コードに基づいたレイアウト -->
+<div lang={lang}>
+  <slot />
+</div>
+```
+
+> [!success] SvelteKitの多言語対応のメリット
+> - **ルーティング機能として提供**: URL構造がそのままファイル構造になり、直感的
+> - **型安全性**: `$page.params.lang`が型推論され、型チェックが効く
+> - **iframe対応不要**: ルーティングが自動的に処理されるため、親フレームのURL取得が不要
+> - **保守性**: URL構造の変更がファイル構造の変更だけで済む
+> - **SEO対応**: 各言語のURLが明確に分離され、検索エンジン最適化が容易
+> - **お客様の要求に適している**: URL構造が明確で、多言語対応が自然に実装できる
+
+> [!tip] 実務での利点
+> - **開発効率**: URL解析のコードを書く必要がなく、ルーティングパラメータを取得するだけ
+> - **エラーハンドリング**: 無効な言語コードは404として自動的に処理される
+> - **テスト容易性**: 各言語のルートが独立しているため、テストが容易
+> - **拡張性**: 新しい言語の追加が、ファイル構造の追加だけで済む
+
 > [!success] 実務メリット（まとめ）
 > - **コードの重複排除**: サーバー/クライアントで同じロジックを使用可能
 > - **型安全性**: TypeScriptでエンドツーエンドの型チェック
@@ -1096,6 +1188,56 @@ Svelteのファイル構造は、**PHPと非常に似ている**：
 > - **保守性の向上**: 変更が1箇所で済む
 > - **型安全性**: TypeScriptで型チェック可能
 > - **再利用性**: 他の画面でも同じコンポーネントを使用可能
+
+#### 実測データ: フォーム入力フィールドのコンポーネント化
+
+実際のプロジェクトでのコード削減効果を測定した結果：
+
+**現状（Alpine.js）**:
+- `app-form-label`パターンが**499箇所**、**43ファイル**に存在
+- 1箇所あたり約4行のコード
+- **合計: 約1,996行**（4行 × 499箇所）
+
+```html
+<!-- Alpine.js: 各箇所で同じ構造を繰り返し記述 -->
+<div class="mb-2">
+  <label class="app-form-label-required">カテゴリコード</label>
+  <input type="text" disabled x-model="category.s_code" class="app-form-input" />
+</div>
+```
+
+**Svelteコンポーネント化後**:
+- コンポーネント定義: 約20行（1回のみ）
+- 使用箇所: 1行 × 499箇所
+- **合計: 約519行**（20行 + 499行）
+
+```svelte
+<!-- AppInput.svelte: コンポーネント定義（1回のみ） -->
+<script lang="ts">
+  let { label, value, disable = false }: { 
+    label: string; 
+    value: string; 
+    disable?: boolean 
+  } = $props();
+</script>
+
+<div class="mb-2">
+  <label class="app-form-label-required">{label}</label>
+  <input type="text" disabled={disable} bind:value={value} class="app-form-input" />
+</div>
+```
+
+```svelte
+<!-- 使用側: 1行で記述可能 -->
+<AppInput label="DP予約ST" value={detail.s_reserve_code} disable={true} />
+<AppInput label="予約番号" value={detail.s_reserve_code} disable={true} />
+```
+
+> [!success] 実測による削減効果
+> - **コード量**: 1,996行 → 519行（**約74%削減、約1/4に**）
+> - **保守性**: 変更が1箇所（コンポーネント定義）で済む
+> - **一貫性**: すべてのフォーム入力フィールドが同じ構造で統一される
+> - **型安全性**: TypeScriptにより、プロパティの誤りをコンパイル時に検出可能
 
 ### 6.2 パフォーマンス最適化の自動化
 
