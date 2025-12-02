@@ -58,7 +58,7 @@ aliases:
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Projects/frontend-migration\|TOMONI移行計画]] | SvelteKitへのフロントエンド移行 |
+| [[Sveltekit導入計画\|TOMONI移行計画]] | SvelteKitへのフロントエンド移行 |
 
 ---
 

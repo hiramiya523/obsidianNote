@@ -180,7 +180,7 @@ export default {
 ## 関連ドキュメント
 
 - [[svelte/QA|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
-- [[../Projects/frontend-migration|TOMONI移行計画]] - SvelteKit移行プロジェクト
+- [[Sveltekit導入計画|TOMONI移行計画]] - SvelteKit移行プロジェクト
 - [[../Index|ホーム]] - 目次に戻る
 
 ---
