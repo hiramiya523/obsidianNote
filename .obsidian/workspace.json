@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Projects/テストカバレッジ改善計画.md",
+                "file": "Projects/Sveltekit導入計画.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "テストカバレッジ改善計画"
+              "title": "Sveltekit導入計画"
             }
           }
         ],
@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "[\"updated\"]",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -89,7 +89,8 @@
               "title": "ブックマーク"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -212,9 +213,11 @@
   },
   "active": "192a5ed5e7a6b708",
   "lastOpenFiles": [
+    "Frontend/sveltekit/search-box-design.md",
+    "Projects/Sveltekit導入計画.md",
+    "Projects/テストカバレッジ改善計画.md",
     "Projects/テストカバレッジ指標の説明.md",
     "Projects/AI開発移行計画.md",
-    "Projects/テストカバレッジ改善計画.md",
     "テストカバレッジ指標の説明.md",
     "テストカバレッジ改善アドバイス.md",
     "Untitled.canvas",
@@ -223,9 +226,7 @@
     "Projects/AI開発移行計画_評価と提案 1.md",
     "Index.md",
     "テスト駆動&テストファースト.md",
-    "Projects/Sveltekit導入計画.md",
     "Readme.md",
-    "Frontend/sveltekit/search-box-design.md",
     "Frontend/sveltekit/search-box-implementation.md",
     "Frontend/svelte/QA.md",
     "2025-11-28.md",
