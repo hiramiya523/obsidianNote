@@ -14,21 +14,11 @@
               "type": "markdown",
               "state": {
                 "file": "Projects/Sveltekit導入計画.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Sveltekit導入計画"
-            }
-          },
-          {
-            "id": "192a5ed5e7a6b708",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
             }
           }
         ]
@@ -153,7 +143,7 @@
               "type": "all-properties",
               "state": {
                 "sortOrder": "frequency",
-                "showSearch": false,
+                "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-archive",
@@ -205,37 +195,80 @@
       "bases:Create new base": false
     }
   },
-  "active": "6291a00b95ca1964",
+  "floating": {
+    "id": "863f1b2439bd86db",
+    "type": "floating",
+    "children": [
+      {
+        "id": "fc54a0625d946ebf",
+        "type": "window",
+        "children": [
+          {
+            "id": "1793a4625fcff32f",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "5a2b5fcf5bdebea9",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "Projects/Sveltekit導入計画.md",
+                    "mode": "preview",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "Sveltekit導入計画"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 448,
+        "y": 116,
+        "width": 1024,
+        "height": 800,
+        "maximize": true,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "5a2b5fcf5bdebea9",
   "lastOpenFiles": [
-    "Frontend/sveltekit/search-box-design.md",
+    "Index.md",
     "Projects/Sveltekit導入計画.md",
     "Projects/AI開発移行計画.md",
-    "Projects/テストカバレッジ改善計画.md",
-    "Projects/テストカバレッジ指標の説明.md",
-    "テストカバレッジ指標の説明.md",
-    "テストカバレッジ改善アドバイス.md",
-    "Untitled.canvas",
-    "Projects/AI開発移行計画_評価と提案 v2.md",
-    "Projects/AI開発移行計画_評価と提案.md",
-    "Projects/AI開発移行計画_評価と提案 1.md",
-    "Index.md",
-    "テスト駆動&テストファースト.md",
-    "Readme.md",
-    "Frontend/sveltekit/search-box-implementation.md",
+    "Frontend/svelte/Q&A.md",
     "Frontend/svelte/QA.md",
-    "2025-11-28.md",
-    "Frontend/sveltekit-notes.md",
-    "search-box-design-rationale.md",
+    "Frontend/sveltekit/検索ボックス実装.md",
+    "Linux/SetUID設定.md",
+    "Linux/サーバー設定.md",
+    "Linux/rc.local設定.md",
+    "Linux/Postfix設定.md",
+    "Linux/コマンドチートシート.md",
+    "Frontend/sveltekit/検索ボックス設計.md",
+    "Frontend/SvelteKitメモ.md",
+    "Docker/FluentBitFAQ.md",
+    "Docker/FluentBit推奨構成.md",
+    "Docker/FluentBit導入検討.md",
+    "Database/SQLチートシート.md",
+    "Readme.md",
+    "Laravel/サービスディレクトリ構造.md",
+    "Laravel/サービス依存関係リファクタリング計画.md",
+    "Laravel/サービスプロバイダ登録順序.md",
+    "Laravel/推奨アプローチ.md",
+    "Laravel/Laravel11ベストプラクティス.md",
+    "Laravel/service-directory-structure.md",
+    "Laravel/service-provider-registration-order.md",
+    "Projects/テストカバレッジ指標の説明.md",
+    "Laravel/service-structure-refactoring-guide.md.bak",
+    "Laravel/service-domain-separation-strategy.md.bak",
+    "Laravel/service-directory-structure-proposal.md.bak",
+    "Laravel",
+    "Untitled.canvas",
     "Frontend/sveltekit",
     "Frontend/svelte",
-    "プレゼン.md",
-    "Docker/fluent-bit-faq.md",
-    "Linux/commands-cheatsheet.md",
-    "Docker/fluent-bit-introduction.md",
-    "Database/sql-cheatsheet.md",
-    "Docker/fluent-bit-implementation.md",
-    "Windows/hyper-v-nat-setup.md",
-    "Linux/setuid.md",
     "Projects",
     "Database",
     "Linux",
