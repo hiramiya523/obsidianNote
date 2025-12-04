@@ -1,3 +1,19 @@
+---
+title: Laravel 11 ベストプラクティス
+created: 2025-12-03
+updated: 2025-12-03
+category: Laravel
+tags:
+  - laravel
+  - php
+  - best-practices
+  - di
+  - dependency-injection
+aliases:
+  - Laravel11
+  - Laravelベストプラクティス
+---
+
 # Laravel 11 ベストプラクティス（2025年12月現在）
 
 ## 概要

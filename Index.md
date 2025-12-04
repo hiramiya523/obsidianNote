@@ -21,59 +21,61 @@ aliases:
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Docker/FluentBit導入検討\|Fluent Bit 導入検討]] | 導入すべきか？メリット・デメリット比較 |
-| [[Docker/FluentBit推奨構成\|Fluent Bit 推奨構成]] | 具体的な実装計画と設定ファイル |
-| [[Docker/FluentBitFAQ\|Fluent Bit FAQ]] | Grafana構成・Loki・logrotate連携 |
+| [[Docker/FluentBit導入検討|Fluent Bit 導入検討]] | 導入すべきか？メリット・デメリット比較 |
+| [[Docker/FluentBit推奨構成|Fluent Bit 推奨構成]] | 具体的な実装計画と設定ファイル |
+| [[Docker/FluentBitFAQ|Fluent Bit FAQ]] | Grafana構成・Loki・logrotate連携 |
 
 ### 🐧 Linux
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Linux/コマンドチートシート\|コマンドチートシート]] | よく使うLinuxコマンド集 |
-| [[Linux/Postfix設定\|Postfix設定]] | メールサーバーの設定 |
-| [[Linux/サーバー設定\|サーバー設定]] | SSH, sudo, sysctl等 |
-| [[Linux/rc.local設定\|rc.local]] | 起動スクリプト設定 |
-| [[Linux/SetUID設定\|SetUID]] | 特殊権限について |
+| [[Linux/コマンドチートシート|コマンドチートシート]] | よく使うLinuxコマンド集 |
+| [[Linux/Postfix設定|Postfix設定]] | メールサーバーの設定 |
+| [[Linux/サーバー設定|サーバー設定]] | SSH, sudo, sysctl等 |
+| [[Linux/rc.local設定|rc.local]] | 起動スクリプト設定 |
+| [[Linux/SetUID設定|SetUID]] | 特殊権限について |
 
 ### 🪟 Windows
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Windows/hyper-v-nat-setup\|Hyper-V NAT構築]] | VM用の内部NATネットワーク設定 |
+| [[Windows/hyper-v-nat-setup|Hyper-V NAT構築]] | VM用の内部NATネットワーク設定 |
 
 ### 🗄️ Database
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Database/SQLチートシート\|SQLチートシート]] | SQL構文・パフォーマンス最適化 |
+| [[Database/SQLチートシート|SQLチートシート]] | SQL構文・パフォーマンス最適化 |
 
 ### 🚀 Laravel
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Laravel/Laravel11ベストプラクティス\|Laravel 11 ベストプラクティス]] | 2025年12月現在のLaravel 11のベストプラクティス |
-| [[Laravel/推奨アプローチ\|推奨アプローチ]] | DIコンテナ登録とコンストラクタインジェクションの推奨実装順序 |
-| [[Laravel/サービスプロバイダ登録順序\|ServiceProvider登録順序]] | サービスプロバイダの登録順序の重要性と循環参照の解決方法 |
-| [[Laravel/サービス依存関係リファクタリング計画\|サービス依存関係リファクタリング計画]] | 循環参照問題の解決計画と実装手順 |
-| [[Laravel/サービスディレクトリ構造\|サービスディレクトリ構造]] | ドメイン分離戦略とディレクトリ構造の提案 |
+| [[Laravel/Laravel11ベストプラクティス|Laravel 11 ベストプラクティス]] | 2025年12月現在のLaravel 11のベストプラクティス |
+| [[Laravel/Laravel_コンストラクタインジェクションによるDIメリット_まとめ|コンストラクタインジェクションによるDIのメリット]] | DIの本質とメリット、実装パターン |
+| [[Laravel/推奨アプローチ|推奨アプローチ]] | DIコンテナ登録とコンストラクタインジェクションの推奨実装順序 |
+| [[Laravel/サービスプロバイダ登録順序|ServiceProvider登録順序]] | サービスプロバイダの登録順序の重要性と循環参照の解決方法 |
+| [[Laravel/サービス依存関係リファクタリング計画|サービス依存関係リファクタリング計画]] | 循環参照問題の解決計画と実装手順 |
+| [[Laravel/サービスディレクトリ構造|サービスディレクトリ構造]] | ドメイン分離戦略とディレクトリ構造の提案 |
 
 ### 🎨 Frontend
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Frontend/SvelteKitメモ\|SvelteKitメモ]] | SSR、$state、$derived、$bindable等 |
-| [[Frontend/svelte/Q&A\|SvelteKit Q&A]] | Sanctum認証・ユニバーサルfetchの実装 |
-| [[Frontend/sveltekit/検索ボックス設計\|検索ボックス設計]] | SvelteKitでの検索機能の設計 |
-| [[Frontend/sveltekit/検索ボックス実装\|検索ボックス実装]] | SvelteKitでの検索機能の実装 |
+| [[Frontend/SvelteKitメモ|SvelteKitメモ]] | SSR、$state、$derived、$bindable等 |
+| [[Frontend/svelte/Q&A|SvelteKit Q&A]] | Sanctum認証・ユニバーサルfetchの実装 |
+| [[Frontend/sveltekit/検索ボックス設計|検索ボックス設計]] | SvelteKitでの検索機能の設計 |
+| [[Frontend/sveltekit/検索ボックス実装|検索ボックス実装]] | SvelteKitでの検索機能の実装 |
 
 ### 📋 Projects
 
 | ドキュメント | 概要 |
 |-------------|------|
-| [[Projects/Sveltekit導入計画\|SvelteKit導入計画]] | SvelteKitへのフロントエンド移行計画 |
-| [[Projects/AI開発移行計画\|AI開発移行計画]] | SDD/IDDによる自律型進化システムへの移行計画 |
-| [[Projects/テストカバレッジ改善計画\|テストカバレッジ改善計画]] | テスト戦略の改善計画 |
-| [[Projects/テストカバレッジ指標の説明\|テストカバレッジ指標の説明]] | テストカバレッジ指標の詳細説明 |
+| [[Projects/Sveltekit導入計画|Sveltekit導入計画]] | SvelteKitへのフロントエンド移行計画 |
+| [[Projects/AI開発移行計画|AI開発移行計画]] | SDD/IDDによる自律型進化システムへの移行計画 |
+| [[Projects/テストカバレッジ改善計画|テストカバレッジ改善計画]] | テスト戦略の改善計画 |
+| [[Projects/テストカバレッジ指標の説明|テストカバレッジ指標の説明]] | テストカバレッジ指標の詳細説明 |
+| [[Projects/予約ドメインの循環参照解決とサブドメイン分割戦略|予約ドメインの循環参照解決とサブドメイン分割戦略]] | 予約ドメインの循環参照問題の解決戦略とサブドメイン分割 |
 
 ---
 
@@ -155,7 +157,11 @@ aliases:
 │   └── svelte/
 │       └── Q&A.md
 └── 📁 Projects/             # プロジェクト関連
-    └── frontend-migration.md
+    ├── Sveltekit導入計画.md
+    ├── AI開発移行計画.md
+    ├── テストカバレッジ改善計画.md
+    ├── テストカバレッジ指標の説明.md
+    └── 予約ドメインの循環参照解決とサブドメイン分割戦略.md
 ```
 
 ---
@@ -163,3 +169,22 @@ aliases:
 ---
 
 *最終更新: 2025年12月3日*
+
+## 📊 Graphviewでのカテゴリ表示について
+
+各ドキュメントには`category`フィールドが追加されています。Graphviewでカテゴリ別に表示するには：
+
+1. **Graphviewを開く** (`Ctrl+G` または `Cmd+G`)
+2. **フィルターパネルを開く** (右上のフィルターアイコン)
+3. **タグでフィルタリング** - カテゴリタグ（例: `#docker`, `#laravel`, `#frontend`）で絞り込み
+4. **フロントマターの`category`フィールド** - 各ノードにカテゴリ情報が含まれています
+
+### カテゴリ一覧
+
+- `Database` - データベース関連
+- `Docker` - Docker・コンテナ関連
+- `Frontend` - フロントエンド関連
+- `Laravel` - Laravel・PHP関連
+- `Linux` - Linux・サーバー関連
+- `Projects` - プロジェクト関連
+- `Windows` - Windows関連

@@ -1,6 +1,8 @@
 ---
 title: Sveltekit導入計画
 created: 2025-11-28
+updated: 2025-12-03
+category: Projects
 tags:
   - project
   - sveltekit
@@ -1472,10 +1474,10 @@ Svelte/SvelteKitは、現在のトレンドであり、将来性も期待でき�
 ## 関連ドキュメント
 
 ### SvelteKit関連
-- [[Frontend/sveltekit-notes|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
-- [[Frontend/svelte/QA|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
-- [[Frontend/sveltekit/search-box-design|検索ボックス設計]] - SvelteKitでの検索機能の設計
-- [[Frontend/sveltekit/search-box-implementation|検索ボックス実装]] - SvelteKitでの検索機能の実装
+- [[Frontend/SvelteKitメモ|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
+- [[Frontend/svelte/Q&A|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
+- [[Frontend/sveltekit/検索ボックス設計|検索ボックス設計]] - SvelteKitでの検索機能の設計
+- [[Frontend/sveltekit/検索ボックス実装|検索ボックス実装]] - SvelteKitでの検索機能の実装
 
 ### 関連プロジェクト
 - [[Projects/AI開発移行計画|AI開発移行計画]] - SDD/IDDについての詳細な計画

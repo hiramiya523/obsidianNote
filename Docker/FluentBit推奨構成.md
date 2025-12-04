@@ -1,6 +1,8 @@
 ---
 title: ログ収集コンテナ導入推奨事項
 created: 2025-11-28
+updated: 2025-12-03
+category: Docker
 tags:
   - docker
   - logging
@@ -17,8 +19,8 @@ aliases:
 > [!abstract] 概要
 > 本番環境へのFluent Bit導入に関する具体的な実装計画と設定ファイルです。
 > 
-> 👉 導入すべきかの判断は [[fluent-bit-introduction|導入検討]] を参照
-> 👉 よくある質問は [[fluent-bit-faq|FAQ]] を参照
+> 👉 導入すべきかの判断は [[Docker/FluentBit導入検討|導入検討]] を参照
+> 👉 よくある質問は [[Docker/FluentBitFAQ|FAQ]] を参照
 
 ---
 
@@ -229,7 +231,7 @@ docker compose -f compose.yaml -f compose.production.yaml up -d
 **目的**: ディスク容量を管理
 
 > [!note] 詳細
-> [[fluent-bit-faq#3-logrotate連携の具体的な想定|FAQ - logrotate連携]] も参照
+> [[Docker/FluentBitFAQ#3-logrotate連携の具体的な想定|FAQ - logrotate連携]] も参照
 
 #### /etc/logrotate.d/app-logs
 
@@ -266,7 +268,7 @@ docker compose -f compose.yaml -f compose.production.yaml up -d
 **目的**: ログ検索・分析の効率化
 
 > [!note] Lokiについて
-> [[fluent-bit-faq#2-lokiとは何か|FAQ - Lokiとは？]] も参照
+> [[Docker/FluentBitFAQ#2-lokiとは何か|FAQ - Lokiとは？]] も参照
 
 #### 構成追加（Loki + Grafana）
 
@@ -417,11 +419,11 @@ logging:
 ## 関連ドキュメント
 
 ### Docker関連
-- [[fluent-bit-introduction|導入検討]] - メリット・デメリット比較
-- [[fluent-bit-faq|FAQ]] - よくある質問
+- [[Docker/FluentBit導入検討|導入検討]] - メリット・デメリット比較
+- [[Docker/FluentBitFAQ|FAQ]] - よくある質問
 
 ### 監視・ログ関連
-- [[../Linux/commands-cheatsheet|Linuxコマンド]] - ログ確認コマンド
+- [[Linux/コマンドチートシート|Linuxコマンド]] - ログ確認コマンド
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る

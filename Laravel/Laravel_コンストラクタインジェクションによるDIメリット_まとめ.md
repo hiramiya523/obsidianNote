@@ -1,3 +1,19 @@
+---
+title: Laravel コンストラクタインジェクションによるDIのメリット
+created: 2025-12-03
+updated: 2025-12-03
+category: Laravel
+tags:
+  - laravel
+  - php
+  - dependency-injection
+  - di
+  - コンストラクタインジェクション
+aliases:
+  - DIメリット
+  - コンストラクタインジェクション
+---
+
 # Laravel コンストラクタインジェクションによるDIのメリット - まとめ
 
 ## 📌 結論

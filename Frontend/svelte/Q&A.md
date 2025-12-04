@@ -1,6 +1,8 @@
 ---
 title: SvelteKit Q&A - Sanctum認証とユニバーサルfetch
 created: 2025-11-28
+updated: 2025-12-03
+category: Frontend
 tags:
   - sveltekit
   - svelte
@@ -299,7 +301,7 @@ Sanctumのセッションcookie名とCSRFトークンのcookie名は何ですか
 
 ## 関連ドキュメント
 
-- [[../sveltekit-notes|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
+- [[Frontend/SvelteKitメモ|SvelteKitメモ]] - SSR、リアクティビティ等の詳細
 - [[Projects/Sveltekit導入計画|SvelteKit導入計画]] - フロントエンド移行プロジェクト
 - [[../../Index|ホーム]] - 目次に戻る
 

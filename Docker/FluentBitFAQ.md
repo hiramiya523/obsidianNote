@@ -1,6 +1,8 @@
 ---
 title: ログ収集コンテナ導入 FAQ
 created: 2025-11-28
+updated: 2025-12-03
+category: Docker
 tags:
   - docker
   - logging
@@ -18,8 +20,8 @@ aliases:
 > [!abstract] 概要
 > ログ収集コンテナ導入に関するよくある質問と回答です。
 > 
-> 👉 基本的な検討は [[fluent-bit-introduction|導入検討]] を参照
-> 👉 具体的な実装は [[fluent-bit-implementation|推奨構成]] を参照
+> 👉 基本的な検討は [[Docker/FluentBit導入検討|導入検討]] を参照
+> 👉 具体的な実装は [[Docker/FluentBit推奨構成|推奨構成]] を参照
 
 ---
 
@@ -336,8 +338,8 @@ services:
 ## 関連ドキュメント
 
 ### Docker関連
-- [[fluent-bit-introduction|導入検討]] - メリット・デメリット比較
-- [[fluent-bit-implementation|推奨構成]] - 具体的な実装計画
+- [[Docker/FluentBit導入検討|導入検討]] - メリット・デメリット比較
+- [[Docker/FluentBit推奨構成|推奨構成]] - 具体的な実装計画
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る

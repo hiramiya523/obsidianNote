@@ -1,6 +1,8 @@
 ---
 title: SQL チートシート・パフォーマンス
 created: 2025-11-28
+updated: 2025-12-03
+category: Database
 tags:
   - sql
   - database
@@ -241,7 +243,7 @@ SELECT * FROM cte WHERE ...
 ## 関連ドキュメント
 
 ### データベース関連
-- [[../Docker/fluent-bit-introduction|Fluent Bit導入検討]] - ログ管理（DBログも含む）
+- [[Docker/FluentBit導入検討|Fluent Bit導入検討]] - ログ管理（DBログも含む）
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る

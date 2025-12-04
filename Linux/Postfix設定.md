@@ -1,6 +1,8 @@
 ---
 title: Postfix メールサーバー設定
 created: 2025-11-28
+updated: 2025-12-03
+category: Linux
 tags:
   - linux
   - postfix
@@ -153,8 +155,8 @@ sendmail -f sender@example.com recipient@example.com
 ## 関連ドキュメント
 
 ### Linux関連
-- [[commands-cheatsheet|Linuxコマンド]] - 基本コマンド
-- [[server-settings|サーバー設定]] - SSH, sudo, sysctl等
+- [[Linux/コマンドチートシート|Linuxコマンド]] - 基本コマンド
+- [[Linux/サーバー設定|サーバー設定]] - SSH, sudo, sysctl等
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る

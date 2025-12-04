@@ -1,6 +1,8 @@
 ---
 title: SvelteKit メモ
 created: 2025-11-28
+updated: 2025-12-03
+category: Frontend
 tags:
   - sveltekit
   - svelte
@@ -179,7 +181,7 @@ export default {
 
 ## 関連ドキュメント
 
-- [[svelte/QA|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
+- [[Frontend/svelte/Q&A|SvelteKit Q&A]] - Sanctum認証・ユニバーサルfetch実装
 - [[Projects/Sveltekit導入計画|SvelteKit導入計画]] - SvelteKit移行プロジェクト
 - [[../Index|ホーム]] - 目次に戻る
 

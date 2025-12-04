@@ -1,6 +1,8 @@
 ---
 title: Docker Composeへのログ収集コンテナ導入検討
 created: 2025-11-28
+updated: 2025-12-03
+category: Docker
 tags:
   - docker
   - logging
@@ -16,7 +18,7 @@ aliases:
 > [!abstract] 概要
 > Docker Compose環境にFluentdなどのログ収集コンテナを追加すべきかの検討資料。
 > 
-> 👉 具体的な実装は [[fluent-bit-implementation|推奨構成]] を参照
+> 👉 具体的な実装は [[Docker/FluentBit推奨構成|推奨構成]] を参照
 
 ---
 
@@ -82,7 +84,7 @@ x-common-configs: &x-common-configs
 > | # | メリット | 詳細 |
 > |---|---------|------|
 > | 1 | **ログの一元管理・横断検索** | 全14コンテナのログを一箇所で検索可能。Laravel/nginx/mariadb/redisのエラーを相関分析 |
-> | 2 | **柔軟な出力先** | Elasticsearch, S3, BigQuery, [[fluent-bit-faq#2-lokiとは何か\|Loki]] など。出力先の切り替えがアプリ変更なしで可能 |
+> | 2 | **柔軟な出力先** | Elasticsearch, S3, BigQuery, [[Docker/FluentBitFAQ#2-lokiとは何か|Loki]] など。出力先の切り替えがアプリ変更なしで可能 |
 > | 3 | **ログの構造化** | Laravelのログを自動パース。JSONフィールドによる高精度フィルタリング |
 > | 4 | **コンテナ停止時のログ保全** | json-file driver: コンテナ削除でログ消失。fluentd: 外部ストレージに永続化 |
 
@@ -118,7 +120,7 @@ x-common-configs: &x-common-configs
 ## 実装例（Fluent Bit + Loki構成）
 
 > [!note] 詳細な実装
-> より詳細な設定は [[fluent-bit-implementation#phase-1-本番環境にfluent-bit導入ファイル出力のみ|推奨構成 - Phase 1]] を参照
+> より詳細な設定は [[Docker/FluentBit推奨構成#phase-1-本番環境にfluent-bit導入ファイル出力のみ|推奨構成 - Phase 1]] を参照
 
 ### 1. compose.yaml への追加
 
@@ -233,8 +235,8 @@ graph TD
 ## 関連ドキュメント
 
 ### Docker関連
-- [[fluent-bit-implementation|推奨構成]] - 具体的な実装計画
-- [[fluent-bit-faq|FAQ]] - よくある質問
+- [[Docker/FluentBit推奨構成|推奨構成]] - 具体的な実装計画
+- [[Docker/FluentBitFAQ|FAQ]] - よくある質問
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る

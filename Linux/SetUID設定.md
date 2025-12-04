@@ -1,6 +1,8 @@
 ---
 title: SetUID 特殊権限
 created: 2025-11-28
+updated: 2025-12-03
+category: Linux
 tags:
   - linux
   - security
@@ -76,11 +78,11 @@ chmod u+s samplepgm
 ## 関連ドキュメント
 
 ### Linux関連
-- [[server-settings|サーバー設定]] - SSH, sudo, sysctl等
-- [[commands-cheatsheet|Linuxコマンド]] - 基本コマンド
+- [[Linux/サーバー設定|サーバー設定]] - SSH, sudo, sysctl等
+- [[Linux/コマンドチートシート|Linuxコマンド]] - 基本コマンド
 
 ### セキュリティ関連
-- [[server-settings#ssh設定|SSH設定]] - セキュリティ設定
+- [[Linux/サーバー設定#ssh設定|SSH設定]] - セキュリティ設定
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る

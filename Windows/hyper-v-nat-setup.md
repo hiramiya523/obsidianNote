@@ -1,6 +1,8 @@
 ---
 title: Hyper-V NAT ネットワーク構築
 created: 2025-11-28
+updated: 2025-12-03
+category: Windows
 tags:
   - windows
   - hyper-v
@@ -174,7 +176,7 @@ Remove-VMSwitch -SwitchName "NATSwitchForVM"
 ## 関連ドキュメント
 
 ### 仮想化関連
-- [[../Linux/server-settings|サーバー設定]] - ネットワーク設定の参考
+- [[Linux/サーバー設定|サーバー設定]] - ネットワーク設定の参考
 
 ### その他
 - [[../Index|ホーム]] - 目次に戻る
