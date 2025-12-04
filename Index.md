@@ -57,6 +57,9 @@ aliases:
 | [[Laravel/サービスプロバイダ登録順序|ServiceProvider登録順序]] | サービスプロバイダの登録順序の重要性と循環参照の解決方法 |
 | [[Laravel/サービス依存関係リファクタリング計画|サービス依存関係リファクタリング計画]] | 循環参照問題の解決計画と実装手順 |
 | [[Laravel/サービスディレクトリ構造|サービスディレクトリ構造]] | ドメイン分離戦略とディレクトリ構造の提案 |
+| [[Laravel/Coordinatorパターンの実装とコントローラーへの影響|Coordinatorパターンの実装とコントローラーへの影響]] | Coordinatorパターンの実装パターンとコントローラーへの影響 |
+| [[Laravel/CoordinatorとMediatorパターンの違い|CoordinatorとMediatorパターンの違い]] | CoordinatorとMediatorパターンの詳細な比較 |
+| [[Laravel/一方向依存関係のルール強制方法|一方向依存関係のルール強制方法]] | Deptracによる依存関係の検証とルール強制 |
 
 ### 🎨 Frontend
 

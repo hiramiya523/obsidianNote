@@ -4,20 +4,25 @@
     "type": "split",
     "children": [
       {
-        "id": "a3182f1978742414",
+        "id": "b1dab5e6c5faf1be",
         "type": "tabs",
         "children": [
           {
-            "id": "edbc4edb4735f41a",
+            "id": "3fc076d8acab2818",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Laravel/CoordinatorとMediatorパターンの違い.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CoordinatorとMediatorパターンの違い"
             }
           }
-        ]
+        ],
+        "stacked": true
       }
     ],
     "direction": "vertical"
@@ -49,7 +54,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "[\"updated\"]",
+                "query": "file:Lar",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -109,12 +114,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Welcome.md",
+                "file": "Laravel/CoordinatorとMediatorパターンの違い.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Welcomeからのアウトゴーイングリンク"
+              "title": "Outgoing links from CoordinatorとMediatorパターンの違い"
             }
           },
           {
@@ -129,7 +134,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-tags",
-              "title": "タグ"
+              "title": "Tags"
             }
           },
           {
@@ -152,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Welcome.md",
+                "file": "Laravel/CoordinatorとMediatorパターンの違い.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Welcomeのアウトライン"
+              "title": "Outline of CoordinatorとMediatorパターンの違い"
             }
           },
           {
@@ -167,18 +172,18 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "Projects/テストカバレッジ改善計画.md"
+                "file": "Laravel/CoordinatorとMediatorパターンの違い.md"
               },
               "icon": "lucide-info",
-              "title": "File properties for テストカバレッジ改善計画"
+              "title": "File properties for CoordinatorとMediatorパターンの違い"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 654.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -191,34 +196,37 @@
       "bases:Create new base": false
     }
   },
-  "active": "edbc4edb4735f41a",
+  "active": "3fc076d8acab2818",
   "lastOpenFiles": [
-    "Index.md",
+    "Laravel/一方向依存関係のルール強制方法.md",
+    "Laravel/Coordinatorパターンの実装とコントローラーへの影響.md",
+    "Laravel/CoordinatorとMediatorパターンの違い.md",
+    "Untitled.canvas",
     "Readme.md",
+    "Untitled 2.canvas",
+    "Untitled 1.canvas",
+    "Projects/予約ドメインの循環参照解決とサブドメイン分割戦略.md",
+    "coordinator-vs-mediator.md",
+    "coordinator-implementation-impact.md",
+    "dependency-rule-enforcement.md",
+    "Laravel/Laravel_コンストラクタインジェクションによるDIメリット_まとめ.md",
+    "Docker/FluentBitFAQ.md",
+    "Laravel/サービスディレクトリ構造.md",
+    "Laravel/サービス依存関係リファクタリング計画.md",
+    "Docker/FluentBit推奨構成.md",
+    "Linux/コマンドチートシート.md",
+    "Linux/SetUID設定.md",
+    "Index.md",
     "プレゼン.md",
     "テスト駆動&テストファースト.md",
-    "Untitled.canvas",
     "Frontend/sveltekit/検索ボックス設計.md",
     "check_links.md",
     "Docker/FluentBit導入検討.md",
     "Laravel/サービスプロバイダ登録順序.md",
     "Laravel/推奨アプローチ.md",
-    "Laravel/サービス依存関係リファクタリング計画.md",
-    "Laravel/Laravel_コンストラクタインジェクションによるDIメリット_まとめ.md",
     "Laravel/Laravel_コンストラクタインジェクションによるDIメリット.md",
-    "Projects/予約ドメインの循環参照解決とサブドメイン分割戦略.md",
     "Projects/reservation-domain-dependency-strategy.md",
     "Projects/reservation-subdomain-structure.md",
-    "Laravel/サービスディレクトリ構造.md",
-    "Projects/Sveltekit導入計画.md",
-    "Projects/AI開発移行計画.md",
-    "Frontend/svelte/Q&A.md",
-    "Frontend/svelte/QA.md",
-    "Frontend/sveltekit/検索ボックス実装.md",
-    "Linux/SetUID設定.md",
-    "Linux/サーバー設定.md",
-    "Linux/rc.local設定.md",
-    "Linux/Postfix設定.md",
     "Laravel/service-structure-refactoring-guide.md.bak",
     "Laravel/service-domain-separation-strategy.md.bak",
     "Laravel/service-directory-structure-proposal.md.bak",
