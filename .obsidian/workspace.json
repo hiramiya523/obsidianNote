@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Laravel/CoordinatorとMediatorパターンの違い.md",
-                "mode": "preview",
+                "file": "Laravel/サービスディレクトリ構造.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CoordinatorとMediatorパターンの違い"
+              "title": "サービスディレクトリ構造"
             }
           }
         ],
@@ -114,12 +114,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Laravel/CoordinatorとMediatorパターンの違い.md",
+                "file": "Laravel/サービスディレクトリ構造.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from CoordinatorとMediatorパターンの違い"
+              "title": "Outgoing links from サービスディレクトリ構造"
             }
           },
           {
@@ -157,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Laravel/CoordinatorとMediatorパターンの違い.md",
+                "file": "Laravel/サービスディレクトリ構造.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of CoordinatorとMediatorパターンの違い"
+              "title": "Outline of サービスディレクトリ構造"
             }
           },
           {
@@ -172,10 +172,10 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "Laravel/CoordinatorとMediatorパターンの違い.md"
+                "file": "Laravel/サービスディレクトリ構造.md"
               },
               "icon": "lucide-info",
-              "title": "File properties for CoordinatorとMediatorパターンの違い"
+              "title": "File properties for サービスディレクトリ構造"
             }
           }
         ],
@@ -199,8 +199,13 @@
   "active": "3fc076d8acab2818",
   "lastOpenFiles": [
     "Laravel/一方向依存関係のルール強制方法.md",
-    "Laravel/Coordinatorパターンの実装とコントローラーへの影響.md",
+    "Laravel/サービス設計のファクトチェックと推奨方針.md",
     "Laravel/CoordinatorとMediatorパターンの違い.md",
+    "coordinator-pattern-clarification.md",
+    "facade-pattern-for-project.md",
+    "facade-vs-mediator-and-middle-class.md",
+    "Untitled.md",
+    "Laravel/Coordinatorパターンの実装とコントローラーへの影響.md",
     "Untitled.canvas",
     "Readme.md",
     "Untitled 2.canvas",
@@ -222,11 +227,6 @@
     "Frontend/sveltekit/検索ボックス設計.md",
     "check_links.md",
     "Docker/FluentBit導入検討.md",
-    "Laravel/サービスプロバイダ登録順序.md",
-    "Laravel/推奨アプローチ.md",
-    "Laravel/Laravel_コンストラクタインジェクションによるDIメリット.md",
-    "Projects/reservation-domain-dependency-strategy.md",
-    "Projects/reservation-subdomain-structure.md",
     "Laravel/service-structure-refactoring-guide.md.bak",
     "Laravel/service-domain-separation-strategy.md.bak",
     "Laravel/service-directory-structure-proposal.md.bak",

@@ -60,6 +60,7 @@ aliases:
 | [[Laravel/Coordinatorパターンの実装とコントローラーへの影響|Coordinatorパターンの実装とコントローラーへの影響]] | Coordinatorパターンの実装パターンとコントローラーへの影響 |
 | [[Laravel/CoordinatorとMediatorパターンの違い|CoordinatorとMediatorパターンの違い]] | CoordinatorとMediatorパターンの詳細な比較 |
 | [[Laravel/一方向依存関係のルール強制方法|一方向依存関係のルール強制方法]] | Deptracによる依存関係の検証とルール強制 |
+| [[Laravel/サービス設計のファクトチェックと推奨方針|サービス設計のファクトチェックと推奨方針]] | AI提案のファクトチェックとLaravelにおける正しい設計方針 |
 
 ### 🎨 Frontend
 
