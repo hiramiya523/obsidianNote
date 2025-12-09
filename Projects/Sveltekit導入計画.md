@@ -14,10 +14,10 @@ aliases:
   - フロントエンド移行
 ---
 
-# TOMONIシステム SvelteKit導入計画
+# システム SvelteKit導入計画
 
 > [!abstract] 概要
-> TOMONIシステムの新規フロント画面にSvelteKitを採用する計画
+> Iシステムの新規フロント画面にSvelteKitを採用する計画
 
 ---
 

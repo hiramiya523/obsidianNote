@@ -11,14 +11,10 @@
             "id": "3fc076d8acab2818",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "MCourseTestDesign.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "MCourseTestDesign"
+              "title": "New tab"
             }
           }
         ],
@@ -54,7 +50,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "file:Lar",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -79,7 +75,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 326.5
+    "width": 271.5
   },
   "right": {
     "id": "b9a4debae8ae8c51",
@@ -114,12 +110,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "MCourseTestDesign.md",
+                "file": "SVELTEKIT_TYPESCRIPT_TUTORIAL_PLAN.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from MCourseTestDesign"
+              "title": "Outgoing links from SVELTEKIT_TYPESCRIPT_TUTORIAL_PLAN"
             }
           },
           {
@@ -157,13 +153,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MCourseTestDesign.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of MCourseTestDesign"
+              "title": "Outline"
             }
           },
           {
@@ -172,10 +167,10 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "MCourseTestDesign.md"
+                "file": "SVELTEKIT_TYPESCRIPT_TUTORIAL_PLAN.md"
               },
               "icon": "lucide-info",
-              "title": "File properties for MCourseTestDesign"
+              "title": "File properties for SVELTEKIT_TYPESCRIPT_TUTORIAL_PLAN"
             }
           }
         ],
@@ -183,7 +178,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 654.5
+    "width": 555.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -198,44 +193,44 @@
   },
   "active": "3fc076d8acab2818",
   "lastOpenFiles": [
+    "Frontend/sveltekit/a.md",
+    "Frontend/sveltekit/Untitled.md",
+    "Frontend/sveltekit/FormActions_vs_Fetch.md",
+    "Frontend/SvelteKitメモ.md",
+    "Frontend/sveltekit/chatgpt.md",
+    "Frontend/gemini.md",
+    "Projects/Sveltekit導入計画.md",
+    "Laravel/Refactoring/循環参照分析_Reservation以外.md",
+    "Laravel/Refactoring",
+    "TUTORIAL.md",
+    "Projects/SvelteKit_Tutorial/02_実践チュートリアル.md",
+    "TODO_APP_IMPLEMENTATION_PLAN.md",
+    "Projects/SvelteKit_Tutorial/01_Todoアプリ実装計画.md",
+    "Projects/SvelteKit_Tutorial/00_全体計画.md",
+    "Projects/SvelteKit_Tutorial",
+    "Sveltekit Form actions.md",
+    "Laravel/Testing/MCourseモデルテスト設計書.md",
+    "Laravel/Testing",
+    "CIRCULAR_DEPENDENCY_ANALYSIS.md",
+    "Untitled.md",
+    "SVELTEKIT_TYPESCRIPT_TUTORIAL_PLAN.md",
+    "TODO_APP_IMPLEMENTATION_PLAN2.md",
+    "MCourseTestDesign.md",
+    "Laravel/Laravel_コンストラクタインジェクションによるDIメリット_まとめ.md",
     "Index.md",
     "Readme.md",
     "プレゼン.md",
     "Linux/Postfix設定.md",
     "Git.md",
-    "MCourseTestDesign.md",
-    "Laravel/サービスプロバイダ登録順序.md",
-    "Laravel/Coordinatorパターンの実装とコントローラーへの影響.md",
-    "Laravel/Laravel11ベストプラクティス.md",
-    "Laravel/Laravel_コンストラクタインジェクションによるDIメリット_まとめ.md",
-    "Linux/FTP.md",
-    "Linux/コマンドチートシート.md",
-    "Windows/hyper-v-nat-setup.md",
-    "Projects/予約ドメインの循環参照解決とサブドメイン分割戦略.md",
-    "Projects/テストカバレッジ指標の説明.md",
-    "Projects/Sveltekit導入計画.md",
-    "Projects/テストカバレッジ改善計画.md",
-    "Laravel/サービス依存関係リファクタリング計画.md",
-    "Laravel/サービスディレクトリ構造.md",
-    "Laravel/一方向依存関係のルール強制方法.md",
-    "Laravel/サービス設計のファクトチェックと推奨方針.md",
-    "Laravel/CoordinatorとMediatorパターンの違い.md",
-    "coordinator-pattern-clarification.md",
-    "facade-pattern-for-project.md",
-    "facade-vs-mediator-and-middle-class.md",
     "Untitled.canvas",
     "Untitled 2.canvas",
     "Untitled 1.canvas",
-    "coordinator-vs-mediator.md",
     "Laravel/service-structure-refactoring-guide.md.bak",
     "Laravel/service-domain-separation-strategy.md.bak",
     "Laravel/service-directory-structure-proposal.md.bak",
     "Laravel",
     "Frontend/sveltekit",
     "Frontend/svelte",
-    "Projects",
-    "Database",
-    "Linux",
-    "Docker"
+    "Projects"
   ]
 }
