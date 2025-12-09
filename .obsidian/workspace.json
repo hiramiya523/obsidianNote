@@ -11,10 +11,14 @@
             "id": "3fc076d8acab2818",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Projects/Laravel_Scramble_実装ガイド.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Laravel_Scramble_実装ガイド"
             }
           }
         ],
@@ -50,7 +54,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "中間DB",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -153,12 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Projects/Laravel_Scramble_実装ガイド.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of Laravel_Scramble_実装ガイド"
             }
           },
           {
@@ -193,9 +198,16 @@
   },
   "active": "3fc076d8acab2818",
   "lastOpenFiles": [
-    "Frontend/sveltekit/a.md",
-    "Frontend/sveltekit/Untitled.md",
+    "Projects/Laravel_API_型定義自動生成ガイド.md",
+    "Projects/Laravel_Scramble_実装ガイド.md",
+    "プレゼン.md",
+    "Frontend/sveltekit/Zod_Superforms_Guide.md",
+    "Projects/Untitled.md",
+    "Frontend/sveltekit/FormActions_FAQ.md",
+    "Frontend/sveltekit/sveltekit バリデーションについての疑問.md",
     "Frontend/sveltekit/FormActions_vs_Fetch.md",
+    "Frontend/sveltekit/form actionsの疑問.md",
+    "Frontend/sveltekit/a.md",
     "Frontend/SvelteKitメモ.md",
     "Frontend/sveltekit/chatgpt.md",
     "Frontend/gemini.md",
@@ -215,13 +227,6 @@
     "Untitled.md",
     "SVELTEKIT_TYPESCRIPT_TUTORIAL_PLAN.md",
     "TODO_APP_IMPLEMENTATION_PLAN2.md",
-    "MCourseTestDesign.md",
-    "Laravel/Laravel_コンストラクタインジェクションによるDIメリット_まとめ.md",
-    "Index.md",
-    "Readme.md",
-    "プレゼン.md",
-    "Linux/Postfix設定.md",
-    "Git.md",
     "Untitled.canvas",
     "Untitled 2.canvas",
     "Untitled 1.canvas",

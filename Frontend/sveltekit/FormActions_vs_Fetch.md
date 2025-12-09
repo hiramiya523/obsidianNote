@@ -1,6 +1,6 @@
 # SvelteKit Form Actions vs fetch 実装方針とアーキテクチャ選定
 
-タグ: #sveltekit #form-actions #fetch #laravel #bff #architecture #best-practices
+タグ: #sveltekit #form-actions #fetch #laravel #bff #architecture #best-practices #security
 
 ---
 
@@ -8,11 +8,12 @@
 
 - [[#結論：迷ったらこう選ぶ]]
 - [[#1. 核心的違い：「宣言的」vs「命令的」]]
-- [[#2. 実装比較：Form Actions vs Fetch]]
-- [[#3. Fetch (Client Side) の使いどころ]]
-- [[#4. 用語整理・アーキテクチャ]]
-- [[#5. 経営・マネジメント視点での選定理由]]
-- [[#6. 3年・5年・10年先を見据えたロードマップ]]
+- [[#2. セキュリティ観点の比較]]
+- [[#3. 実装比較：Form Actions vs Fetch]]
+- [[#4. Fetch (Client Side) の使いどころ]]
+- [[#5. 用語整理・アーキテクチャ]]
+- [[#6. 経営・マネジメント視点での選定理由]]
+- [[#7. 3年・5年・10年先を見据えたロードマップ]]
 
 ---
 
@@ -22,9 +23,9 @@ SvelteKit 2.x + Svelte 5 + Laravel 11 環境における最適な選択基準は
 
 | シチュエーション | 推奨手段 | 理由 |
 | :--- | :--- | :--- |
-| **データの更新（Mutation）**<br>ログイン、保存、登録、設定変更など | **Form Actions**<br>(+ `use:enhance`) | ・**自動再検証 (Automatic Revalidation)** により、更新後のデータ再取得が不要。 ・ローディングやエラー状態の管理がフレームワークによって自動化される。 ・JSなしでも動く堅牢性（プログレッシブエンハンスメント）。 |
-| **高度なインタラクション**<br>リアルタイム検索、無限スクロール、「いいね」ボタン | **fetch** | ・ページ遷移を伴わない細かいUI更新に向く。 ・イベント（`oninput`など）から自由に呼べる。 |
-| **バックエンドとの通信** | **SvelteKit経由 (BFF)** | ・ブラウザからLaravelを直接叩かず、SvelteKitサーバーを経由させることでセキュリティと柔軟性を担保する。 |
+| **データの更新（Mutation）**<br>ログイン、保存、登録、設定変更など | **Form Actions**<br>(+ `use:enhance`) | ・**自動再検証 (Automatic Revalidation)** により、更新後のデータ再取得が不要<br>・ローディングやエラー状態の管理がフレームワークによって自動化される<br>・**CSRF/XSS対策がデフォルトで強力**（後述） |
+| **高度なインタラクション**<br>リアルタイム検索、無限スクロール、「いいね」ボタン | **fetch** | ・ページ遷移を伴わない細かいUI更新に向く<br>・イベント（`oninput`など）から自由に呼べる |
+| **バックエンドとの通信** | **SvelteKit経由 (BFF)** | ・ブラウザからLaravelを直接叩かず、SvelteKitサーバーを経由させることでセキュリティと柔軟性を担保する |
 
 **合言葉:**
 > **「フォームは Form Actions、インタラクションは Fetch。通信は BFF (SvelteKit) を通す。」**
@@ -52,7 +53,37 @@ SvelteKit 2.x + Svelte 5 + Laravel 11 環境における最適な選択基準は
 
 ---
 
-## 2. 実装比較：Form Actions vs Fetch
+## 2. セキュリティ観点の比較
+
+セキュリティにおいては、**「Form Actionsの方が“自動で守ってくれる範囲”が広く、安全設計をしやすい」** というのが結論です。
+
+### 2.1 CSRF (Cross-Site Request Forgery)
+
+- **Form Actions (推奨):**
+  - SvelteKitはデフォルトでOriginチェックを行っており、**追加のCSRFトークン実装は基本不要**です。
+  - 外部サイトからのPOSTは自動的にブロックされます（`csrf.checkOrigin: true` の場合）。
+- **Fetch (Laravel直叩き):**
+  - Laravel + Sanctum (SPA認証) を使う場合、CookieとCSRFトークンヘッダ(`X-XSRF-TOKEN`)の手動管理が必要です。
+  - CORSやCookie属性(`SameSite`, `Secure`)の設定ミスにより、脆弱性が生まれやすい構成です。
+
+### 2.2 XSS (Cross-Site Scripting) と認証情報
+
+- **Form Actions (推奨):**
+  - 認証トークンを **HttpOnly Cookie** に保存し、JavaScriptから隠蔽することが容易です。
+  - SvelteKitサーバー(BFF)がトークンをハンドリングするため、万が一XSSが起きてもトークン自体は盗まれません。
+- **Fetch (Client Side):**
+  - アクセストークンを `localStorage` に保存するのは**絶対NG**（XSSで即乗っ取り）。
+  - 安全に実装するには、結局HttpOnly Cookieを使う必要があり、それならBFF構成と変わりません。
+
+### 2.3 攻撃面 (Attack Surface) の縮小
+
+- **BFF構成 (SvelteKit経由):**
+  - ブラウザから見えるのはSvelteKitサーバーのみ。Laravelは内部ネットワークやIP制限で守ることができます。
+  - 攻撃の入り口を一本化できるため、防御がシンプルになります。
+
+---
+
+## 3. 実装比較：Form Actions vs Fetch
 
 「ユーザーを作成して一覧を更新する」というシナリオで比較します。
 
@@ -197,7 +228,7 @@ export const actions: Actions = {
 
 ---
 
-## 3. Fetch (Client Side) の使いどころ
+## 4. Fetch (Client Side) の使いどころ
 
 更新系以外、特に「フォーム」という概念に当てはまらない高度なインタラクションには Fetch が適しています。
 
@@ -255,7 +286,7 @@ export const actions: Actions = {
 
 ---
 
-## 4. 用語整理・アーキテクチャ
+## 5. 用語整理・アーキテクチャ
 
 混乱しやすい用語と推奨構成の整理です。
 
@@ -273,14 +304,14 @@ export const actions: Actions = {
 Laravel と SvelteKit を併用する場合、**SvelteKit のサーバーサイド (`+page.server.ts`) を BFF と見なす**のがベストプラクティスです。
 
 -   **Browser** -> (Form Actions / use:enhance) -> **SvelteKit Server** -> (Server fetch) -> **Laravel API**
-- **メリット:**
-  - 認証トークン（HttpOnly Cookie）をSvelteKitサーバー内に隠蔽できる。
-  - CORS設定が不要。
-  - 将来的なバックエンド移行が容易。
+-   **メリット:**
+    -   認証トークン（HttpOnly Cookie）をSvelteKitサーバー内に隠蔽できる。
+    -   CORS設定が不要。
+    -   将来的なバックエンド移行が容易。
 
 ---
 
-## 5. 経営・マネジメント視点での選定理由
+## 6. 経営・マネジメント視点での選定理由
 
 技術選定を説明する際のロジックとして活用してください。
 
@@ -289,7 +320,7 @@ Laravel と SvelteKit を併用する場合、**SvelteKit のサーバーサイ�
 > **「Form Actions (BFFパターン) を主体にします」**
 >
 > - **品質:** データの整合性を保つための「手続き（再取得、エラー表示）」をフレームワークが自動で行うため、**人為的ミスによるバグを構造的に防げます**。
-> - **セキュリティ:** 認証キーをサーバー間通信に閉じ込められるため、漏洩リスクが最小化されます。
+> - **セキュリティ:** 認証キーをサーバー間通信に閉じ込められるため、漏洩リスクが最小化されます。CSRF対策も標準機能でカバーできます。
 > - **保守性:** Web標準に準拠しており、技術トレンドの変化に強く、長期的に安定します。
 
 ### 🅱️ 躍進派（UX・スピード・最新技術重視）への説明
@@ -302,7 +333,7 @@ Laravel と SvelteKit を併用する場合、**SvelteKit のサーバーサイ�
 
 ---
 
-## 6. 3年・5年・10年先を見据えたロードマップ
+## 7. 3年・5年・10年先を見据えたロードマップ
 
 - **3年後 (2028年): Remote Functionsの定着**
   - Form ActionsとFetchの使い分けがよりシームレスになり、RPCスタイルが標準化するでしょう。
